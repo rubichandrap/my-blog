@@ -13,6 +13,105 @@ export interface BlogPost {
 // Sample blog posts data
 const blogPosts: BlogPost[] = [
   {
+    slug: 'understanding-the-cap-theorem',
+    title: 'Understanding the CAP Theorem in Distributed Systems',
+    date: 'May 1, 2023',
+    excerpt:
+      'A deep dive into the CAP theorem and its implications for distributed systems design.',
+    readingTime: 10,
+    tags: ['Distributed Systems', 'CAP Theorem', 'Architecture'],
+    coverImage: 'https://picsum.photos/seed/understanding-cap-theorem/1200/630',
+    content: `<h1>📚 Understanding the CAP Theorem: Why It Matters in Distributed Systems</h1>
+
+  <p>
+    When building or maintaining distributed systems—whether it's a global-scale web application, a microservices architecture, or a cloud-based platform—you’ll eventually run into the <strong>CAP Theorem</strong>. It’s one of those core principles that’s easy to overlook, but absolutely essential to get right if you want your system to be <strong>reliable</strong>, <strong>available</strong>, and <strong>performant</strong>.
+  </p>
+
+  <h2>🧠 What is the CAP Theorem?</h2>
+
+  <p>
+    The <strong>CAP Theorem</strong>, introduced by computer scientist <em>Eric Brewer</em> in 2000, states that in any <strong>distributed data system</strong>, you can only guarantee <strong>two out of the following three properties</strong> at the same time:
+  </p>
+
+  <ol>
+    <li><strong>Consistency (C)</strong> – Every read receives the most recent write or an error.</li>
+    <li><strong>Availability (A)</strong> – Every request receives a response, even if it’s not the most recent one.</li>
+    <li><strong>Partition Tolerance (P)</strong> – The system continues to operate despite network partitions (communication issues between nodes).</li>
+  </ol>
+
+  <blockquote>
+    <strong>TL;DR:</strong> You can’t have <em>all three</em> at once. At best, you choose <em>two</em>, and sacrifice the third depending on your system’s goals.
+  </blockquote>
+
+  <h2>📊 Visualizing the Trade-off</h2>
+
+  <p>
+    Imagine a triangle where each corner represents C, A, and P:
+  </p>
+
+  <ul>
+    <li><strong>CA (Consistency + Availability)</strong>: Only works if there's no network partition—unrealistic in distributed environments.</li>
+    <li><strong>CP (Consistency + Partition Tolerance)</strong>: The system may become unavailable during a partition to maintain consistency.</li>
+    <li><strong>AP (Availability + Partition Tolerance)</strong>: The system stays up but may return stale or inconsistent data.</li>
+  </ul>
+
+  <p>
+    Since network partitions <em>will</em> happen, we always assume <strong>Partition Tolerance</strong> is necessary. That means choosing between <strong>Consistency</strong> and <strong>Availability</strong>.
+  </p>
+
+  <h2>🧩 Why Is It Important?</h2>
+
+  <h3>1. System Design Decisions</h3>
+  <p>
+    Understanding CAP helps you make architectural trade-offs. Do you value strict data consistency (e.g., in financial systems) or high availability (e.g., in social apps)?
+  </p>
+
+  <h3>2. Choose the Right Database</h3>
+  <p>
+    Different databases favor different CAP combinations:
+  </p>
+  <ul>
+    <li><strong>MongoDB, CouchDB</strong> → AP</li>
+    <li><strong>HBase, BigTable</strong> → CP</li>
+    <li><strong>Zookeeper, etcd</strong> → CP</li>
+    <li><strong>DynamoDB</strong> → AP with tunable consistency</li>
+  </ul>
+
+  <h3>3. Prepare for Failures Gracefully</h3>
+  <p>
+    Knowing CAP helps you plan fallback mechanisms, retries, and error handling suited to your system's tolerance.
+  </p>
+
+  <h3>4. Set Realistic Expectations</h3>
+  <p>
+    You can’t promise 100% consistency and availability during a network issue. CAP helps set realistic boundaries for stakeholders.
+  </p>
+
+  <h2>🚧 Real-World Examples</h2>
+
+  <ul>
+    <li><strong>Banking Systems (CP)</strong>: Consistency is critical. It’s better to return an error than serve outdated info.</li>
+    <li><strong>E-Commerce Cart (AP)</strong>: Users can still add items even if the backend can’t confirm the latest state right away.</li>
+  </ul>
+
+  <h2>⚖️ CAP is a Guideline, Not a Law</h2>
+
+  <p>
+    CAP is a <em>theoretical model</em>. Many real-world systems implement <strong>tunable consistency</strong>, letting you choose the right behavior depending on the operation (e.g., strong consistency for payments, eventual consistency for analytics).
+  </p>
+
+  <h2>🧠 Takeaway</h2>
+
+  <p>
+    If you’re building or maintaining distributed systems, <strong>you can’t ignore CAP</strong>. It helps you design systems that balance consistency, availability, and resilience under failure.
+  </p>
+
+  <p>
+    So next time someone asks about consistency vs availability, you’ll know it’s not just theory—it’s the foundation of practical system design.
+  </p>`,
+    featured: true,
+  },
+  {
     slug: 'modern-react-state-management',
     title: 'Modern React State Management: Beyond Redux',
     date: 'April 15, 2023',
