@@ -1,14 +1,14 @@
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft, Github, Linkedin, Mail, Twitter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import me from "@/assets/images/me.png";
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowLeft, Github, Linkedin, Mail, Twitter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import me from '@/assets/images/me.png';
 
 export const metadata = {
-  title: "About Me | Rubi Chandraputra",
+  title: 'About Me | Rubi Chandraputra',
   description:
-    "Learn more about Rubi Chandraputra, a software engineer with 5+ years of experience",
+    'Learn more about Rubi Chandraputra, a software engineer with 5+ years of experience',
 };
 
 export default function AboutPage() {

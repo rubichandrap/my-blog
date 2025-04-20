@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { useState } from "react";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { useState } from 'react';
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -14,24 +14,24 @@ export function SiteHeader() {
 
   const routes = [
     {
-      href: "/",
-      label: "Home",
-      active: pathname === "/",
+      href: '/',
+      label: 'Home',
+      active: pathname === '/',
     },
     {
-      href: "/blog",
-      label: "Blog",
-      active: pathname === "/blog" || pathname.startsWith("/blog/"),
+      href: '/blog',
+      label: 'Blog',
+      active: pathname === '/blog' || pathname.startsWith('/blog/'),
     },
     {
-      href: "/about",
-      label: "About",
-      active: pathname === "/about",
+      href: '/about',
+      label: 'About',
+      active: pathname === '/about',
     },
     {
-      href: "/contact",
-      label: "Contact",
-      active: pathname === "/contact",
+      href: '/contact',
+      label: 'Contact',
+      active: pathname === '/contact',
     },
   ];
 
@@ -43,12 +43,12 @@ export function SiteHeader() {
             <span className="font-bold text-xl">RC</span>
           </Link>
           <nav className="hidden md:flex gap-6">
-            {routes.map((route) => (
+            {routes.map(route => (
               <Link
                 key={route.href}
                 href={route.href}
                 className={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  route.active ? "text-foreground" : "text-foreground/60"
+                  route.active ? 'text-foreground' : 'text-foreground/60'
                 }`}
               >
                 {route.label}
@@ -75,12 +75,12 @@ export function SiteHeader() {
                   <span className="font-bold text-xl">RC</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
-                  {routes.map((route) => (
+                  {routes.map(route => (
                     <Link
                       key={route.href}
                       href={route.href}
                       className={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                        route.active ? "text-foreground" : "text-foreground/60"
+                        route.active ? 'text-foreground' : 'text-foreground/60'
                       }`}
                       onClick={() => setOpen(false)}
                     >

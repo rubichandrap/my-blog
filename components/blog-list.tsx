@@ -1,5 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   Card,
   CardContent,
@@ -7,23 +7,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock } from "lucide-react";
-import { getAllBlogPosts } from "@/lib/blog";
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Calendar, Clock } from 'lucide-react';
+import { getAllBlogPosts } from '@/lib/blog';
 
 export default function BlogList() {
   const posts = getAllBlogPosts();
 
   return (
     <div className="grid gap-8">
-      {posts.map((post) => (
+      {posts.map(post => (
         <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
           <Card className="overflow-hidden transition-all hover:shadow-md">
             <div className="grid gap-4 md:grid-cols-[1fr_2fr]">
               <div className="relative aspect-video overflow-hidden">
                 <Image
-                  src={post.coverImage || "/placeholder.svg"}
+                  src={post.coverImage || '/placeholder.svg'}
                   alt={post.title}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
@@ -50,7 +50,7 @@ export default function BlogList() {
                 </CardContent>
                 <CardFooter className="p-0 pt-2">
                   <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
+                    {post.tags.map(tag => (
                       <Badge
                         key={tag}
                         variant="secondary"

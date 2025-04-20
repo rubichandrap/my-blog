@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import Link from 'next/link';
+import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
 
 export function SiteFooter() {
   return (

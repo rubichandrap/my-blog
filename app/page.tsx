@@ -1,5 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   ArrowRight,
   Code,
@@ -7,11 +7,11 @@ import {
   Database,
   ExternalLink,
   Globe,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import FeaturedPosts from "@/components/featured-posts";
-import me from "@/assets/images/me.png";
-import { Badge } from "@/components/ui/badge";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import FeaturedPosts from '@/components/featured-posts';
+import me from '@/assets/images/me.png';
+import { Badge } from '@/components/ui/badge';
 
 export default function Home() {
   return (

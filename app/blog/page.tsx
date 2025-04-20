@@ -1,12 +1,12 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import BlogList from "@/components/blog-list";
+import BlogList from '@/components/blog-list';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export const metadata = {
-  title: "Blog | Rubi Chandraputra",
+  title: 'Blog | Rubi Chandraputra',
   description:
-    "Thoughts and insights on software engineering by Rubi Chandraputra",
+    'Thoughts and insights on software engineering by Rubi Chandraputra',
 };
 
 export default function BlogPage() {

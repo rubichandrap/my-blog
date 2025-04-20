@@ -13,15 +13,15 @@ export interface BlogPost {
 // Sample blog posts data
 const blogPosts: BlogPost[] = [
   {
-    slug: "modern-react-state-management",
-    title: "Modern React State Management: Beyond Redux",
-    date: "April 15, 2023",
+    slug: 'modern-react-state-management',
+    title: 'Modern React State Management: Beyond Redux',
+    date: 'April 15, 2023',
     excerpt:
-      "Exploring modern state management solutions in React applications and when to use each approach.",
+      'Exploring modern state management solutions in React applications and when to use each approach.',
     readingTime: 8,
-    tags: ["React", "JavaScript", "State Management", "Frontend"],
+    tags: ['React', 'JavaScript', 'State Management', 'Frontend'],
     coverImage:
-      "https://picsum.photos/seed/modern-react-state-management/1200/630",
+      'https://picsum.photos/seed/modern-react-state-management/1200/630',
     content: `
       <p>State management is one of the most critical aspects of building React applications. For years, Redux has been the go-to solution for managing state in complex React applications. However, the React ecosystem has evolved significantly, and there are now several alternatives that might be better suited for your specific use case.</p>
       
@@ -83,14 +83,14 @@ export function useCounter() {
     featured: true,
   },
   {
-    slug: "typescript-best-practices",
-    title: "TypeScript Best Practices for Large-Scale Applications",
-    date: "March 10, 2023",
+    slug: 'typescript-best-practices',
+    title: 'TypeScript Best Practices for Large-Scale Applications',
+    date: 'March 10, 2023',
     excerpt:
-      "Learn how to effectively use TypeScript to build maintainable and scalable applications.",
+      'Learn how to effectively use TypeScript to build maintainable and scalable applications.',
     readingTime: 10,
-    tags: ["TypeScript", "JavaScript", "Best Practices", "Architecture"],
-    coverImage: "https://picsum.photos/seed/typescript-best-practices/1200/630",
+    tags: ['TypeScript', 'JavaScript', 'Best Practices', 'Architecture'],
+    coverImage: 'https://picsum.photos/seed/typescript-best-practices/1200/630',
     content: `
       <p>TypeScript has become the language of choice for many developers building large-scale applications. Its static typing system helps catch errors early and provides better tooling support. However, using TypeScript effectively requires following certain best practices.</p>
       
@@ -201,15 +201,15 @@ type UserWithoutDates = Omit<User, 'createdAt'>;</code></pre>
     featured: true,
   },
   {
-    slug: "microservices-architecture",
-    title: "Microservices Architecture: Patterns and Pitfalls",
-    date: "February 5, 2023",
+    slug: 'microservices-architecture',
+    title: 'Microservices Architecture: Patterns and Pitfalls',
+    date: 'February 5, 2023',
     excerpt:
-      "An in-depth look at microservices architecture patterns and common pitfalls to avoid.",
+      'An in-depth look at microservices architecture patterns and common pitfalls to avoid.',
     readingTime: 12,
-    tags: ["Architecture", "Microservices", "Backend", "System Design"],
+    tags: ['Architecture', 'Microservices', 'Backend', 'System Design'],
     coverImage:
-      "https://picsum.photos/seed/microservices-architecture/1200/630",
+      'https://picsum.photos/seed/microservices-architecture/1200/630',
     content: `
       <p>Microservices architecture has become increasingly popular for building complex, scalable applications. By breaking down a monolithic application into smaller, independent services, teams can develop, deploy, and scale services independently. However, implementing microservices comes with its own set of challenges.</p>
       
@@ -262,15 +262,15 @@ type UserWithoutDates = Omit<User, 'createdAt'>;</code></pre>
     featured: true,
   },
   {
-    slug: "web-performance-optimization",
-    title: "Web Performance Optimization Techniques for Modern Applications",
-    date: "January 20, 2023",
+    slug: 'web-performance-optimization',
+    title: 'Web Performance Optimization Techniques for Modern Applications',
+    date: 'January 20, 2023',
     excerpt:
       "Learn how to optimize your web application's performance for better user experience and higher conversion rates.",
     readingTime: 9,
-    tags: ["Performance", "Web Development", "Frontend", "Optimization"],
+    tags: ['Performance', 'Web Development', 'Frontend', 'Optimization'],
     coverImage:
-      "https://picsum.photos/seed/web-performance-optimization/1200/630",
+      'https://picsum.photos/seed/web-performance-optimization/1200/630',
     content: `
       <p>Web performance has a direct impact on user experience and business metrics. Studies have shown that even a one-second delay in page load time can result in a 7% reduction in conversions. In this article, we'll explore various techniques to optimize web performance.</p>
       
@@ -369,14 +369,14 @@ if ('serviceWorker' in navigator) {
     featured: false,
   },
   {
-    slug: "serverless-architecture",
-    title: "Serverless Architecture: Benefits and Challenges",
-    date: "December 12, 2022",
+    slug: 'serverless-architecture',
+    title: 'Serverless Architecture: Benefits and Challenges',
+    date: 'December 12, 2022',
     excerpt:
-      "Explore the benefits and challenges of serverless architecture and how it can transform your application development.",
+      'Explore the benefits and challenges of serverless architecture and how it can transform your application development.',
     readingTime: 7,
-    tags: ["Serverless", "Cloud Computing", "Architecture", "AWS Lambda"],
-    coverImage: "https://picsum.photos/seed/serverless-architecture/1200/630",
+    tags: ['Serverless', 'Cloud Computing', 'Architecture', 'AWS Lambda'],
+    coverImage: 'https://picsum.photos/seed/serverless-architecture/1200/630',
     content: `
       <p>Serverless architecture has gained significant popularity in recent years. Despite its name, serverless doesn't mean there are no servers; it means that developers don't have to manage servers. Instead, cloud providers handle the infrastructure, allowing developers to focus solely on writing code.</p>
       
@@ -448,9 +448,9 @@ export function getAllBlogPosts(): BlogPost[] {
 }
 
 export function getFeaturedPosts(): BlogPost[] {
-  return blogPosts.filter((post) => post.featured);
+  return blogPosts.filter(post => post.featured);
 }
 
 export function getBlogPost(slug: string): BlogPost | undefined {
-  return blogPosts.find((post) => post.slug === slug);
+  return blogPosts.find(post => post.slug === slug);
 }

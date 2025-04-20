@@ -1,14 +1,14 @@
-import Link from "next/link";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { getBlogPost, getAllBlogPosts } from "@/lib/blog";
+import Link from 'next/link';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { getBlogPost, getAllBlogPosts } from '@/lib/blog';
 
 export async function generateStaticParams() {
   const posts = getAllBlogPosts();
-  return posts.map((post) => ({
+  return posts.map(post => ({
     slug: post.slug,
   }));
 }
@@ -22,8 +22,8 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post Not Found | Rubi Chandraputra",
-      description: "The requested blog post could not be found.",
+      title: 'Post Not Found | Rubi Chandraputra',
+      description: 'The requested blog post could not be found.',
     };
   }
 
@@ -68,7 +68,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             </div>
             <div className="flex items-center gap-2">
               <Tag className="h-4 w-4" />
-              {post.tags.map((tag) => (
+              {post.tags.map(tag => (
                 <Badge key={tag} variant="secondary" className="font-normal">
                   {tag}
                 </Badge>
