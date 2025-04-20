@@ -1,9 +1,9 @@
-import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowLeft, Github, Linkedin, Mail, Twitter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import me from '@/assets/images/me.png';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Github, Linkedin, Mail } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'About Me | Rubi Chandraputra',
@@ -86,7 +86,7 @@ export default function AboutPage() {
               </h3>
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium">Senior Software Engineer</h4>
+                  <h4 className="font-medium">Software Engineer</h4>
                   <p className="text-sm text-muted-foreground">
                     Rakhasa Artha Wisesa • 2021 - Present
                   </p>
@@ -96,15 +96,11 @@ export default function AboutPage() {
                     coordination across teams. Handled the gRPC Gateway to allow
                     HTTP communication between clients and services. Introduced
                     a custom service bindings mechanism using code generation to
-                    automatically bind services to the gateway. RumahBerkat
-                    Migration Project: Led the transition of a legacy monolithic
-                    system into a microservice-based architecture. Facilitated
-                    planning, module separation, and team coordination
-                    throughout the migration process.
+                    automatically bind services to the gateway.
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium">Full-Stack Developer</h4>
+                  <h4 className="font-medium">Graphic Designer</h4>
                   <p className="text-sm text-muted-foreground">
                     HAI-O • 2018 - 2019
                   </p>
@@ -145,7 +141,7 @@ export default function AboutPage() {
               <div>
                 <h4 className="font-medium">Bachelor of System Information</h4>
                 <p className="text-sm text-muted-foreground">
-                  Universitas Saintek Muhammadiyah • 2016 - 2021
+                  Universitas Saintek Muhammadiyah • 2017 - 2023
                 </p>
               </div>
             </div>
