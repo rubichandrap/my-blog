@@ -1,5 +1,8 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import me from '@/assets/images/me.png';
+import { BriefExperience } from '@/components/brief-experience';
+import FeaturedPosts from '@/components/featured-posts';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   ArrowRight,
   Code,
@@ -8,10 +11,8 @@ import {
   ExternalLink,
   Globe,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import FeaturedPosts from '@/components/featured-posts';
-import me from '@/assets/images/me.png';
-import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -26,11 +27,12 @@ export default function Home() {
                     Rubi Chandraputra
                   </h1>
                   <p className="text-xl text-muted-foreground">
-                    I'm Rubi Chandraputra, a Software Engineer. My primary
+                    I&apos;m Rubi Chandraputra, a Software Engineer. My primary
                     language is TypeScript, and I have deep expertise in modern
                     web technologies including React, Next.js, Express, and
-                    NestJS. I’m also proficient in working with Go and Python,
-                    which supports my versatility across different tech stacks.
+                    NestJS. I&apos;m also proficient in working with Go and
+                    Python, which supports my versatility across different tech
+                    stacks.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -65,7 +67,7 @@ export default function Home() {
               <div className="space-y-2 max-w-3xl">
                 <h2 className="!mb-2">My Expertise</h2>
                 <p className="text-muted-foreground md:text-xl/relaxed">
-                  With over 5 years of experience, I've developed a diverse
+                  With over 5 years of experience, I&apos;ve developed a diverse
                   skill set across the full development stack. Here are the key
                   areas where I can help bring your projects to life.
                 </p>
@@ -250,6 +252,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <BriefExperience />
 
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6 mx-auto">

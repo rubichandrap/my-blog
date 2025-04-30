@@ -1,4 +1,5 @@
 import me from '@/assets/images/me.png';
+import { ExperienceSection } from '@/components/experience-section';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Github, Linkedin, Mail } from 'lucide-react';
@@ -69,11 +70,11 @@ export default function AboutPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold mb-2">
-                Hi, I'm Rubi Chandraputra
+                Hi, I&apos;m Rubi Chandraputra
               </h2>
               <p className="text-muted-foreground">
-                I'm Rubi Chandraputra, a Software Engineer. My primary language
-                is TypeScript, and I have deep expertise in modern web
+                I&apos;m Rubi Chandraputra, a Software Engineer. My primary
+                language is TypeScript, and I have deep expertise in modern web
                 technologies including React, Next.js, Express, and NestJS. I’m
                 also proficient in working with Go and Python, which supports my
                 versatility across different tech stacks.
@@ -147,6 +148,8 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
+
+        <ExperienceSection />
       </div>
     </div>
   );
