@@ -536,6 +536,288 @@ if ('serviceWorker' in navigator) {
     `,
     featured: false,
   },
+  {
+    slug: 'gleam-concurrency-vs-typescript',
+    title: "Learning Gleam Concurrency: A TypeScript Developer's Journey",
+    date: 'October 21, 2025',
+    excerpt:
+      "Discovering Gleam's actor-based concurrency model after years of async/await in TypeScript - it's like learning a new superpower!",
+    readingTime: 8,
+    tags: [
+      'Gleam',
+      'Concurrency',
+      'TypeScript',
+      'Functional Programming',
+      'Learning',
+    ],
+    coverImage: 'https://picsum.photos/seed/gleam-concurrency/1200/630',
+    content: `<h1>🚀 Learning Gleam Concurrency: A TypeScript Developer's Journey</h1>
+
+<p>
+  So here I am, diving into <strong>Gleam</strong> after years of wrestling with async/await in TypeScript, and let me tell you - it's like discovering a completely different way to think about concurrency! 🧠✨
+</p>
+
+<p>
+  If you're like me and have been living in the TypeScript world for a while, Gleam's actor-based concurrency model might feel like learning to drive a manual car after years of automatic. It's different, it's powerful, and honestly? It's pretty darn cool once you get the hang of it.
+</p>
+
+<h2>🤔 The TypeScript Way vs The Gleam Way</h2>
+
+<p>
+  In TypeScript, we're all about <code>async/await</code>, <code>Promises</code>, and managing state across async boundaries. It's like juggling - you need to keep track of what's happening where and when.
+</p>
+
+<pre><code>// TypeScript: The async/await dance
+async function fetchUserData(userId: string): Promise<User> {
+  const user = await fetchUser(userId);
+  const posts = await fetchUserPosts(userId);
+  const comments = await fetchUserComments(userId);
+  
+  return {
+    ...user,
+    posts,
+    comments
+  };
+}
+
+// What if one of these fails? 😅
+// What if we want to cancel the whole operation?
+// What if we need to share state between these calls?</code></pre>
+
+<p>
+  Now, in Gleam, we have <strong>actors</strong> - these are lightweight processes that can send and receive messages. Think of them as tiny workers that can only communicate by passing messages. No shared state, no race conditions, just pure message passing! 🎯
+</p>
+
+<h2>🎯 Example 1: Building a Simple Chat System</h2>
+
+<p>
+  Let's build a chat system where users can send messages. In TypeScript, this would involve managing state, handling async operations, and dealing with potential race conditions.
+</p>
+
+<h3>TypeScript Approach</h3>
+
+<pre><code>// TypeScript: Managing state and async operations
+class ChatRoom {
+  private messages: Message[] = [];
+  private users: Set<string> = new Set();
+  
+  async addMessage(userId: string, content: string): Promise<void> {
+    // What if another message is being added at the same time?
+    // What if the user gets disconnected while we're processing?
+    const message: Message = {
+      id: crypto.randomUUID(),
+      userId,
+      content,
+      timestamp: Date.now()
+    };
+    
+    this.messages.push(message);
+    await this.broadcastToUsers(message);
+  }
+  
+  private async broadcastToUsers(message: Message): Promise<void> {
+    // Async broadcasting - what if this fails?
+    const promises = Array.from(this.users).map(userId => 
+      this.sendToUser(userId, message)
+    );
+    await Promise.all(promises);
+  }
+}</code></pre>
+
+<p>
+  See all those potential issues? Race conditions, error handling, state management... it's a lot to think about! 😅
+</p>
+
+<h3>Gleam Approach</h3>
+
+<pre><code>// Gleam: Actor-based chat system
+import gleam/io
+import gleam/result
+
+// Define our message types
+pub type ChatMessage {
+  UserMessage(user_id: String, content: String)
+  JoinRoom(user_id: String)
+  LeaveRoom(user_id: String)
+}
+
+pub type ChatRoom {
+  ChatRoom(messages: List(String), users: List(String))
+}
+
+// Our chat room actor
+pub fn chat_room_loop(state: ChatRoom) -> Nil {
+  case receive() {
+    UserMessage(user_id, content) -> {
+      let message = "User " <> user_id <> ": " <> content
+      let new_messages = [message, ..state.messages]
+      let new_state = ChatRoom(new_messages, state.users)
+      
+      // Broadcast to all users
+      broadcast_message(message, state.users)
+      chat_room_loop(new_state)
+    }
+    JoinRoom(user_id) -> {
+      let new_users = [user_id, ..state.users]
+      let new_state = ChatRoom(state.messages, new_users)
+      chat_room_loop(new_state)
+    }
+    LeaveRoom(user_id) -> {
+      let new_users = list.filter(state.users, fn(u) { u != user_id })
+      let new_state = ChatRoom(state.messages, new_users)
+      chat_room_loop(new_state)
+    }
+  }
+}
+
+fn broadcast_message(message: String, users: List(String)) -> Nil {
+  // Each user gets their own actor to handle messages
+  list.foreach(users, fn(user_id) {
+    send(user_id, message)
+  })
+}</code></pre>
+
+<p>
+  Look at that! No shared state, no race conditions, just pure message passing. Each actor has its own state, and the only way to communicate is through messages. It's like having a bunch of pen pals who can only communicate by sending letters! 📮
+</p>
+
+<h2>🎮 Example 2: Building a Game Score System</h2>
+
+<p>
+  Let's say we're building a multiplayer game where players can score points. In TypeScript, we'd need to worry about concurrent updates to the score.
+</p>
+
+<h3>TypeScript Approach</h3>
+
+<pre><code>// TypeScript: Managing concurrent score updates
+class GameScore {
+  private scores: Map<string, number> = new Map();
+  private lock = new Mutex(); // Need to prevent race conditions!
+  
+  async addScore(playerId: string, points: number): Promise<void> {
+    await this.lock.acquire();
+    try {
+      const currentScore = this.scores.get(playerId) || 0;
+      this.scores.set(playerId, currentScore + points);
+    } finally {
+      this.lock.release();
+    }
+  }
+  
+  async getTopPlayers(limit: number): Promise<PlayerScore[]> {
+    await this.lock.acquire();
+    try {
+      return Array.from(this.scores.entries())
+        .map(([playerId, score]) => ({ playerId, score }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, limit);
+    } finally {
+      this.lock.release();
+    }
+  }
+}</code></pre>
+
+<p>
+  Mutexes, locks, try-finally blocks... it's like building a fortress just to update a score! 🏰
+</p>
+
+<h3>Gleam Approach</h3>
+
+<pre><code>// Gleam: Actor-based score system
+import gleam/list
+import gleam/string
+
+pub type ScoreMessage {
+  AddScore(player_id: String, points: Int)
+  GetTopPlayers(limit: Int, reply_to: Pid)
+  GetPlayerScore(player_id: String, reply_to: Pid)
+}
+
+pub type ScoreState {
+  ScoreState(scores: List(#(String, Int)))
+}
+
+pub fn score_actor_loop(state: ScoreState) -> Nil {
+  case receive() {
+    AddScore(player_id, points) -> {
+      let new_scores = update_player_score(state.scores, player_id, points)
+      let new_state = ScoreState(new_scores)
+      score_actor_loop(new_state)
+    }
+    GetTopPlayers(limit, reply_to) -> {
+      let top_players = get_top_players(state.scores, limit)
+      send(reply_to, top_players)
+      score_actor_loop(state)
+    }
+    GetPlayerScore(player_id, reply_to) -> {
+      let player_score = get_player_score(state.scores, player_id)
+      send(reply_to, player_score)
+      score_actor_loop(state)
+    }
+  }
+}
+
+fn update_player_score(scores: List(#(String, Int)), player_id: String, points: Int) -> List(#(String, Int)) {
+  // Update or add player score
+  case list.find(scores, fn(score) { score.0 == player_id }) {
+    Ok((_, current_points)) -> {
+      let new_score = #(player_id, current_points + points)
+      list.replace(scores, #(player_id, current_points), new_score)
+    }
+    Error(_) -> {
+      // Player not found, add new score
+      [#(player_id, points), ..scores]
+    }
+  }
+}</code></pre>
+
+<p>
+  No locks, no mutexes, no shared state! Each actor manages its own state, and the only way to interact with it is through messages. It's like having a dedicated scorekeeper who only responds to written requests! 📝
+</p>
+
+<h2>🤯 The "Aha!" Moments</h2>
+
+<p>
+  Learning Gleam's concurrency model has been full of "aha!" moments:
+</p>
+
+<ul>
+  <li><strong>No more race conditions!</strong> Since actors can't share state, there's no way for two processes to mess with the same data at the same time.</li>
+  <li><strong>Fault tolerance built-in!</strong> If one actor crashes, it doesn't bring down the whole system. Other actors keep running.</li>
+  <li><strong>Testing is easier!</strong> You can test each actor in isolation by sending it messages and checking the responses.</li>
+  <li><strong>No callback hell!</strong> No more nested async/await chains or Promise.all() madness.</li>
+</ul>
+
+<h2>🎯 When to Use What?</h2>
+
+<p>
+  After learning both approaches, here's my take:
+</p>
+
+<ul>
+  <li><strong>Use TypeScript async/await when:</strong> You need to integrate with existing JavaScript libraries, you're building simple CRUD applications, or you're working with a team that's more familiar with imperative programming.</li>
+  <li><strong>Use Gleam actors when:</strong> You're building highly concurrent systems, you need fault tolerance, you're working with real-time data, or you want to avoid the complexity of managing shared state.</li>
+</ul>
+
+<h2>🚀 The Journey Continues</h2>
+
+<p>
+  Learning Gleam's concurrency model has been like discovering a new superpower. It's not that one approach is better than the other - they're just different tools for different jobs. But understanding both has made me a better developer overall.
+</p>
+
+<p>
+  The actor model in Gleam feels more like how I naturally think about problems: "This thing needs to handle this type of message, and when it gets that message, it should do this." It's more declarative, more predictable, and honestly? More fun to work with! 🎉
+</p>
+
+<p>
+  If you're a TypeScript developer curious about functional programming and concurrency, I'd definitely recommend giving Gleam a try. It might just change how you think about building concurrent systems! 
+</p>
+
+<p>
+  <em>P.S. - The Gleam community is super friendly and helpful. Don't be afraid to ask questions! 🚀</em>
+</p>`,
+    featured: true,
+  },
 ];
 
 export function getAllBlogPosts(): BlogPost[] {
