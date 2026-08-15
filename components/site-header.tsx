@@ -39,7 +39,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6 mx-auto">
         <div className="flex items-center gap-6 md:gap-10">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 no-underline">
             <span className="font-bold text-xl">RC</span>
           </Link>
           <nav className="hidden md:flex gap-6">
@@ -69,7 +69,7 @@ export function SiteHeader() {
               <div className="flex flex-col gap-4 px-4">
                 <Link
                   href="/"
-                  className="flex items-center space-x-2"
+                  className="flex items-center space-x-2 no-underline"
                   onClick={() => setOpen(false)}
                 >
                   <span className="font-bold text-xl">RC</span>

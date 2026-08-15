@@ -37,7 +37,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Link href="/blog" passHref>
-                    <Button className="gap-1 text-white">
+                    <Button className="gap-1">
                       Read My Blog
                       <ArrowRight className="h-4 w-4" />
                     </Button>
