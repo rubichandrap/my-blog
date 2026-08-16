@@ -58,8 +58,7 @@ export default function Home() {
           <h1>Rubi Chandraputra</h1>
           <p className="mb-0 text-xl leading-8 text-muted-foreground">
             Software engineer. Five-plus years building web applications and
-            backend services in TypeScript, NestJS, and Go. Previously at
-            Rakhasa Artha Wisesa (2021–2025).
+            backend services in TypeScript, NestJS, and Go.
           </p>
           <p className="mb-0 text-muted-foreground">
             TypeScript · React · Next.js · NestJS · Go · Python
