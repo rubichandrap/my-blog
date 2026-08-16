@@ -1,39 +1,36 @@
 1:"$Sreact.fragment"
-2:I[1168,["950","static/chunks/950-3fc0f352aca76473.js","803","static/chunks/803-ea5fca11826230b5.js","721","static/chunks/721-a891f7a019fed20a.js","177","static/chunks/app/layout-4b00acc84d005f83.js"],"ThemeProvider"]
-3:I[6985,["950","static/chunks/950-3fc0f352aca76473.js","803","static/chunks/803-ea5fca11826230b5.js","721","static/chunks/721-a891f7a019fed20a.js","177","static/chunks/app/layout-4b00acc84d005f83.js"],"BackgroundParticles"]
-4:I[8253,["950","static/chunks/950-3fc0f352aca76473.js","803","static/chunks/803-ea5fca11826230b5.js","721","static/chunks/721-a891f7a019fed20a.js","177","static/chunks/app/layout-4b00acc84d005f83.js"],"SiteHeader"]
-5:I[1063,[],""]
-6:I[1483,[],""]
-7:I[7950,["950","static/chunks/950-3fc0f352aca76473.js","611","static/chunks/611-26998e43706f6a97.js","953","static/chunks/app/blog/%5Bslug%5D/page-b77239bf6f219d84.js"],""]
-8:I[4726,["950","static/chunks/950-3fc0f352aca76473.js","803","static/chunks/803-ea5fca11826230b5.js","721","static/chunks/721-a891f7a019fed20a.js","177","static/chunks/app/layout-4b00acc84d005f83.js"],"Toaster"]
-9:I[2611,["950","static/chunks/950-3fc0f352aca76473.js","611","static/chunks/611-26998e43706f6a97.js","953","static/chunks/app/blog/%5Bslug%5D/page-b77239bf6f219d84.js"],"Image"]
-b:I[5125,[],"OutletBoundary"]
-e:I[5125,[],"ViewportBoundary"]
-10:I[5125,[],"MetadataBoundary"]
-12:I[1954,[],""]
-:HL["/my-blog/_next/static/css/51a3b7146dc5aea1.css","style"]
-a:T24ff,<h1>🚀 Learning Gleam Concurrency: A TypeScript Developer's Journey</h1>
+2:I[1168,["950","static/chunks/950-3fc0f352aca76473.js","0","static/chunks/0-f5c0ba736eda0519.js","438","static/chunks/438-014205f4035cea19.js","177","static/chunks/app/layout-4f67d333e4ebc26d.js"],"ThemeProvider"]
+3:I[8253,["950","static/chunks/950-3fc0f352aca76473.js","0","static/chunks/0-f5c0ba736eda0519.js","438","static/chunks/438-014205f4035cea19.js","177","static/chunks/app/layout-4f67d333e4ebc26d.js"],"SiteHeader"]
+4:I[1063,[],""]
+5:I[1483,[],""]
+6:I[7950,["950","static/chunks/950-3fc0f352aca76473.js","953","static/chunks/app/blog/%5Bslug%5D/page-08f1af083db3cb7f.js"],""]
+7:I[4726,["950","static/chunks/950-3fc0f352aca76473.js","0","static/chunks/0-f5c0ba736eda0519.js","438","static/chunks/438-014205f4035cea19.js","177","static/chunks/app/layout-4f67d333e4ebc26d.js"],"Toaster"]
+9:I[5125,[],"OutletBoundary"]
+c:I[5125,[],"ViewportBoundary"]
+e:I[5125,[],"MetadataBoundary"]
+10:I[1954,[],""]
+:HL["/my-blog/_next/static/css/410be6aad2914a0a.css","style"]
+8:T1ff0,<p>
+    I wrote async/await TypeScript for years before I tried Gleam. Its
+    concurrency model is different enough that it took me a while to stop
+    thinking in promises. These are two problems I solved in both languages, and
+    what the actor model changed for me.
+  </p>
 
-<p>
-  So here I am, diving into <strong>Gleam</strong> after years of wrestling with async/await in TypeScript, and let me tell you - it's like discovering a completely different way to think about concurrency! 🧠✨
-</p>
+  <h2>The TypeScript way</h2>
 
-<p>
-  If you're like me and have been living in the TypeScript world for a while, Gleam's actor-based concurrency model might feel like learning to drive a manual car after years of automatic. It's different, it's powerful, and honestly? It's pretty darn cool once you get the hang of it.
-</p>
+  <p>
+    In TypeScript, concurrent work is orchestrated with <code>async/await</code>
+    and <code>Promise</code>. State is shared across async boundaries, which
+    means you think about who can mutate what, and when:
+  </p>
 
-<h2>🤔 The TypeScript Way vs The Gleam Way</h2>
-
-<p>
-  In TypeScript, we're all about <code>async/await</code>, <code>Promises</code>, and managing state across async boundaries. It's like juggling - you need to keep track of what's happening where and when.
-</p>
-
-<pre><code>// TypeScript: The async/await dance
+  <pre><code>// TypeScript: fetch a user and their posts and comments
 async function fetchUserData(userId: string): Promise<User> {
   const user = await fetchUser(userId);
   const posts = await fetchUserPosts(userId);
   const comments = await fetchUserComments(userId);
-  
+
   return {
     ...user,
     posts,
@@ -41,27 +38,30 @@ async function fetchUserData(userId: string): Promise<User> {
   };
 }
 
-// What if one of these fails? 😅
+// What if one of these fails?
 // What if we want to cancel the whole operation?
 // What if we need to share state between these calls?</code></pre>
 
-<p>
-  Now, in Gleam, we have <strong>actors</strong> - these are lightweight processes that can send and receive messages. Think of them as tiny workers that can only communicate by passing messages. No shared state, no race conditions, just pure message passing! 🎯
-</p>
+  <p>
+    Gleam takes a different route: actors. An actor is a lightweight process that
+    owns its state and communicates only by sending and receiving messages. No
+    shared state, no locks, no race conditions — the only way in or out is a
+    message.
+  </p>
 
-<h2>🎯 Example 1: Building a Simple Chat System</h2>
+  <h2>Example 1: a chat system</h2>
 
-<p>
-  Let's build a chat system where users can send messages. In TypeScript, this would involve managing state, handling async operations, and dealing with potential race conditions.
-</p>
+  <p>
+    A chat room tracks users and messages and broadcasts new messages to
+    everyone. In TypeScript that means a mutable collection plus care around
+    concurrent updates and broadcast failures:
+  </p>
 
-<h3>TypeScript Approach</h3>
-
-<pre><code>// TypeScript: Managing state and async operations
+  <pre><code>// TypeScript: managing state and async operations
 class ChatRoom {
   private messages: Message[] = [];
   private users: Set<string> = new Set();
-  
+
   async addMessage(userId: string, content: string): Promise<void> {
     // What if another message is being added at the same time?
     // What if the user gets disconnected while we're processing?
@@ -71,27 +71,28 @@ class ChatRoom {
       content,
       timestamp: Date.now()
     };
-    
+
     this.messages.push(message);
     await this.broadcastToUsers(message);
   }
-  
+
   private async broadcastToUsers(message: Message): Promise<void> {
     // Async broadcasting - what if this fails?
-    const promises = Array.from(this.users).map(userId => 
+    const promises = Array.from(this.users).map(userId =>
       this.sendToUser(userId, message)
     );
     await Promise.all(promises);
   }
 }</code></pre>
 
-<p>
-  See all those potential issues? Race conditions, error handling, state management... it's a lot to think about! 😅
-</p>
+  <p>
+    Every method that touches the room has to handle the same questions:
+    ordering of concurrent updates, failures mid-broadcast, who owns the state.
+  </p>
 
-<h3>Gleam Approach</h3>
+  <h3>Gleam approach</h3>
 
-<pre><code>// Gleam: Actor-based chat system
+  <pre><code>// Gleam: actor-based chat system
 import gleam/io
 import gleam/result
 
@@ -113,7 +114,7 @@ pub fn chat_room_loop(state: ChatRoom) -> Nil {
       let message = "User " <> user_id <> ": " <> content
       let new_messages = [message, ..state.messages]
       let new_state = ChatRoom(new_messages, state.users)
-      
+
       // Broadcast to all users
       broadcast_message(message, state.users)
       chat_room_loop(new_state)
@@ -138,23 +139,23 @@ fn broadcast_message(message: String, users: List(String)) -> Nil {
   })
 }</code></pre>
 
-<p>
-  Look at that! No shared state, no race conditions, just pure message passing. Each actor has its own state, and the only way to communicate is through messages. It's like having a bunch of pen pals who can only communicate by sending letters! 📮
-</p>
+  <p>
+    The room is a loop that owns the state and changes it only through messages.
+    There is nothing to lock, because no other process can see the state at all.
+  </p>
 
-<h2>🎮 Example 2: Building a Game Score System</h2>
+  <h2>Example 2: a game score system</h2>
 
-<p>
-  Let's say we're building a multiplayer game where players can score points. In TypeScript, we'd need to worry about concurrent updates to the score.
-</p>
+  <p>
+    A multiplayer game needs concurrent score updates without losing points. In
+    TypeScript, shared mutable state means a lock around every access:
+  </p>
 
-<h3>TypeScript Approach</h3>
-
-<pre><code>// TypeScript: Managing concurrent score updates
+  <pre><code>// TypeScript: managing concurrent score updates
 class GameScore {
   private scores: Map<string, number> = new Map();
   private lock = new Mutex(); // Need to prevent race conditions!
-  
+
   async addScore(playerId: string, points: number): Promise<void> {
     await this.lock.acquire();
     try {
@@ -164,7 +165,7 @@ class GameScore {
       this.lock.release();
     }
   }
-  
+
   async getTopPlayers(limit: number): Promise<PlayerScore[]> {
     await this.lock.acquire();
     try {
@@ -178,13 +179,14 @@ class GameScore {
   }
 }</code></pre>
 
-<p>
-  Mutexes, locks, try-finally blocks... it's like building a fortress just to update a score! 🏰
-</p>
+  <p>
+    The lock makes the updates safe, but it is bookkeeping you have to get right
+    on every method that touches the scores.
+  </p>
 
-<h3>Gleam Approach</h3>
+  <h3>Gleam approach</h3>
 
-<pre><code>// Gleam: Actor-based score system
+  <pre><code>// Gleam: actor-based score system
 import gleam/list
 import gleam/string
 
@@ -232,52 +234,37 @@ fn update_player_score(scores: List(#(String, Int)), player_id: String, points: 
   }
 }</code></pre>
 
-<p>
-  No locks, no mutexes, no shared state! Each actor manages its own state, and the only way to interact with it is through messages. It's like having a dedicated scorekeeper who only responds to written requests! 📝
-</p>
+  <p>
+    The score state belongs to one actor. Updates arrive as messages and are
+    applied in order, so no lock is needed. Queries are messages too, with a
+    reply address attached.
+  </p>
 
-<h2>🤯 The "Aha!" Moments</h2>
+  <h2>What the actor model changes</h2>
 
-<p>
-  Learning Gleam's concurrency model has been full of "aha!" moments:
-</p>
+  <ul>
+    <li><strong>No shared state</strong>: two actors cannot touch the same data at the same time, because there is no shared data to touch.</li>
+    <li><strong>Fault isolation</strong>: a crashed actor does not bring down the rest of the program; other actors keep running.</li>
+    <li><strong>Testability</strong>: an actor is exercised by sending it messages and checking the replies, no mocking of shared state.</li>
+    <li><strong>No nesting</strong>: no chains of await and Promise.all; interaction is a flat loop of receive and send.</li>
+  </ul>
 
-<ul>
-  <li><strong>No more race conditions!</strong> Since actors can't share state, there's no way for two processes to mess with the same data at the same time.</li>
-  <li><strong>Fault tolerance built-in!</strong> If one actor crashes, it doesn't bring down the whole system. Other actors keep running.</li>
-  <li><strong>Testing is easier!</strong> You can test each actor in isolation by sending it messages and checking the responses.</li>
-  <li><strong>No callback hell!</strong> No more nested async/await chains or Promise.all() madness.</li>
-</ul>
+  <h2>When to use which</h2>
 
-<h2>🎯 When to Use What?</h2>
+  <p>
+    Async/await in TypeScript is the right tool when you are integrating with
+    the JavaScript ecosystem, building a straightforward CRUD application, or
+    working with a team that thinks in imperative code. Gleam actors fit when
+    the system is highly concurrent, needs fault tolerance, or handles real-time
+    data — anywhere shared mutable state is the main source of bugs.
+  </p>
 
-<p>
-  After learning both approaches, here's my take:
-</p>
-
-<ul>
-  <li><strong>Use TypeScript async/await when:</strong> You need to integrate with existing JavaScript libraries, you're building simple CRUD applications, or you're working with a team that's more familiar with imperative programming.</li>
-  <li><strong>Use Gleam actors when:</strong> You're building highly concurrent systems, you need fault tolerance, you're working with real-time data, or you want to avoid the complexity of managing shared state.</li>
-</ul>
-
-<h2>🚀 The Journey Continues</h2>
-
-<p>
-  Learning Gleam's concurrency model has been like discovering a new superpower. It's not that one approach is better than the other - they're just different tools for different jobs. But understanding both has made me a better developer overall.
-</p>
-
-<p>
-  The actor model in Gleam feels more like how I naturally think about problems: "This thing needs to handle this type of message, and when it gets that message, it should do this." It's more declarative, more predictable, and honestly? More fun to work with! 🎉
-</p>
-
-<p>
-  If you're a TypeScript developer curious about functional programming and concurrency, I'd definitely recommend giving Gleam a try. It might just change how you think about building concurrent systems! 
-</p>
-
-<p>
-  <em>P.S. - The Gleam community is super friendly and helpful. Don't be afraid to ask questions! 🚀</em>
-</p>0:{"P":null,"b":"r7EJq8q6BwL3Ww372PDfr","p":"/my-blog","c":["","blog","gleam-concurrency-vs-typescript"],"i":false,"f":[[["",{"children":["blog",{"children":[["slug","gleam-concurrency-vs-typescript","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/my-blog/_next/static/css/51a3b7146dc5aea1.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"min-h-screen bg-background font-sans antialiased","children":["$","$L2",null,{"attribute":"class","defaultTheme":"system","enableSystem":true,"disableTransitionOnChange":true,"children":[["$","$L3",null,{}],["$","div",null,{"className":"relative flex min-h-screen flex-col","children":[["$","$L4",null,{}],["$","div",null,{"className":"flex-1","children":["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"container flex flex-col items-center justify-center min-h-[70vh] px-4 md:px-6 py-12 text-center","children":[["$","h1",null,{"className":"text-6xl font-bold tracking-tighter sm:text-7xl","children":"404"}],["$","p",null,{"className":"mt-4 text-xl text-muted-foreground","children":"Page not found"}],["$","p",null,{"className":"mt-2 text-muted-foreground","children":"Sorry, the page you are looking for doesn't exist or has been moved."}],["$","$L7",null,{"href":"/","children":"Go back home","className":"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-8","ref":null}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","footer",null,{"className":"w-full border-t bg-background","children":["$","div",null,{"className":"container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0 mx-auto","children":[["$","div",null,{"className":"flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0","children":["$","p",null,{"className":"text-center text-sm leading-loose text-muted-foreground md:text-left","children":["© ",2025," Rubi Chandraputra. All rights reserved."]}]}],["$","div",null,{"className":"flex gap-4","children":[["$","$L7",null,{"href":"https://github.com/rubichandrap","target":"_blank","rel":"noopener noreferrer","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-github h-5 w-5 text-muted-foreground hover:text-foreground","children":[["$","path","tonef",{"d":"M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"}],["$","path","9comsn",{"d":"M9 18c-4.51 2-5-2-7-2"}],"$undefined"]}],["$","span",null,{"className":"sr-only","children":"GitHub"}]]}],["$","$L7",null,{"href":"https://www.linkedin.com/in/rubi-chandraputra-9aba65213/","target":"_blank","rel":"noopener noreferrer","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-linkedin h-5 w-5 text-muted-foreground hover:text-foreground","children":[["$","path","c2jq9f",{"d":"M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"}],["$","rect","mk3on5",{"width":"4","height":"12","x":"2","y":"9"}],["$","circle","bt5ra8",{"cx":"4","cy":"4","r":"2"}],"$undefined"]}],["$","span",null,{"className":"sr-only","children":"LinkedIn"}]]}],["$","$L7",null,{"href":"mailto:rubichandrap@gmail.com","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-mail h-5 w-5 text-muted-foreground hover:text-foreground","children":[["$","rect","18n3k1",{"width":"20","height":"16","x":"2","y":"4","rx":"2"}],["$","path","1ocrg3",{"d":"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"}],"$undefined"]}],["$","span",null,{"className":"sr-only","children":"Email"}]]}]]}]]}]}]]}],["$","$L8",null,{}]]}]}]}]]}],{"children":["blog",["$","$1","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["slug","gleam-concurrency-vs-typescript","d"],["$","$1","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","div",null,{"className":"container px-4 md:px-6 py-12 max-w-4xl mx-auto","children":["$","div",null,{"className":"flex flex-col gap-8","children":[["$","div",null,{"className":"flex flex-col gap-2","children":["$","$L7",null,{"href":"/blog","passHref":true,"children":["$","button",null,{"className":"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground w-fit gap-1 p-0 h-auto","ref":"$undefined","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-arrow-left h-4 w-4","children":[["$","path","1l729n",{"d":"m12 19-7-7 7-7"}],["$","path","x3x0zl",{"d":"M19 12H5"}],"$undefined"]}],"Back to Blog"]}]}]}],["$","article",null,{"className":"prose prose-gray dark:prose-invert max-w-none","children":[["$","h1",null,{"className":"text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4","children":"Learning Gleam Concurrency: A TypeScript Developer's Journey"}],["$","div",null,{"className":"flex flex-wrap gap-3 items-center text-sm text-muted-foreground mb-8","children":[["$","div",null,{"className":"flex items-center gap-1","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-calendar h-4 w-4","children":[["$","path","1cmpym",{"d":"M8 2v4"}],["$","path","4m81vk",{"d":"M16 2v4"}],["$","rect","1hopcy",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["$","path","8toen8",{"d":"M3 10h18"}],"$undefined"]}],["$","span",null,{"children":"October 21, 2025"}]]}],["$","div",null,{"className":"flex items-center gap-1","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-clock h-4 w-4","children":[["$","circle","1mglay",{"cx":"12","cy":"12","r":"10"}],["$","polyline","68esgv",{"points":"12 6 12 12 16 14"}],"$undefined"]}],["$","span",null,{"children":[8," min read"]}]]}],["$","div",null,{"className":"flex items-center gap-2","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-tag h-4 w-4","children":[["$","path","vktsd0",{"d":"M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"}],["$","circle","kqv944",{"cx":"7.5","cy":"7.5","r":".5","fill":"currentColor"}],"$undefined"]}],[["$","div","Gleam",{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 font-normal","children":"Gleam"}],["$","div","Concurrency",{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 font-normal","children":"Concurrency"}],["$","div","TypeScript",{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 font-normal","children":"TypeScript"}],["$","div","Functional Programming",{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 font-normal","children":"Functional Programming"}],["$","div","Learning",{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 font-normal","children":"Learning"}]]]}]]}],["$","div",null,{"className":"mb-8","children":["$","$L9",null,{"src":"https://picsum.photos/1200/630","alt":"Learning Gleam Concurrency: A TypeScript Developer's Journey","width":1200,"height":630,"className":"rounded-lg object-cover w-full"}]}],["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$a"}}]]}]]}]}],"$undefined",null,["$","$Lb",null,{"children":["$Lc","$Ld",null]}]]}],{},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","V9YRA9RtFWmBlUhphKGLU",{"children":[["$","$Le",null,{"children":"$Lf"}],null]}],["$","$L10",null,{"children":"$L11"}]]}],false]],"m":"$undefined","G":["$12","$undefined"],"s":false,"S":true}
-f:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-c:null
-d:null
-11:[["$","title","0",{"children":"Learning Gleam Concurrency: A TypeScript Developer's Journey | Rubi Chandraputra | Rubi Chandraputra"}],["$","meta","1",{"name":"description","content":"Discovering Gleam's actor-based concurrency model after years of async/await in TypeScript - it's like learning a new superpower!"}],["$","meta","2",{"name":"author","content":"Rubi Chandraputra"}],["$","meta","3",{"name":"keywords","content":"software engineer,web development,full-stack,blog,Rubi Chandraputra"}],["$","meta","4",{"name":"creator","content":"Rubi Chandraputra"}]]
+  <p>
+    Neither model is better in general. But most concurrent systems I have built
+    are naturally described as message flows, which is exactly what actors
+    model. If you come from TypeScript, that is a good reason to try Gleam.
+  </p>0:{"P":null,"b":"GRqiAZoKirvDyTHogXNBF","p":"/my-blog","c":["","blog","gleam-concurrency-vs-typescript"],"i":false,"f":[[["",{"children":["blog",{"children":[["slug","gleam-concurrency-vs-typescript","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/my-blog/_next/static/css/410be6aad2914a0a.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"min-h-screen bg-background font-sans antialiased","children":["$","$L2",null,{"attribute":"class","defaultTheme":"system","enableSystem":true,"disableTransitionOnChange":true,"children":[["$","div",null,{"className":"relative flex min-h-screen flex-col","children":[["$","$L3",null,{}],["$","div",null,{"className":"flex-1","children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"container flex flex-col items-center justify-center min-h-[70vh] px-4 md:px-6 py-12 text-center","children":[["$","h1",null,{"className":"text-6xl font-bold tracking-tighter sm:text-7xl","children":"404"}],["$","p",null,{"className":"mt-4 text-xl text-muted-foreground","children":"Page not found"}],["$","p",null,{"className":"mt-2 text-muted-foreground","children":"Sorry, the page you are looking for doesn't exist or has been moved."}],["$","$L6",null,{"href":"/","children":"Go back home","className":"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-8","ref":null}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","footer",null,{"className":"w-full border-t bg-background","children":["$","div",null,{"className":"container mx-auto flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 py-6 text-sm","children":[["$","span",null,{"children":["© ",2026," Rubi Chandraputra"]}],["$","span",null,{"aria-hidden":"true","children":"·"}],["$","$L6",null,{"href":"https://github.com/rubichandrap","target":"_blank","rel":"noopener noreferrer","children":"GitHub"}],["$","span",null,{"aria-hidden":"true","children":"·"}],["$","$L6",null,{"href":"https://www.linkedin.com/in/rubi-chandraputra-9aba65213/","target":"_blank","rel":"noopener noreferrer","children":"LinkedIn"}],["$","span",null,{"aria-hidden":"true","children":"·"}],["$","$L6",null,{"href":"mailto:rubichandrap@gmail.com","children":"Email"}]]}]}]]}],["$","$L7",null,{}]]}]}]}]]}],{"children":["blog",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["slug","gleam-concurrency-vs-typescript","d"],["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","div",null,{"className":"container mx-auto max-w-3xl px-4 md:px-6 py-12","children":[["$","$L6",null,{"href":"/blog","className":"text-sm","children":"Back to Blog"}],["$","article",null,{"className":"prose prose-gray dark:prose-invert max-w-none mt-6","children":[["$","h1",null,{"children":"Learning Gleam Concurrency: A TypeScript Developer's Journey"}],["$","p",null,{"className":"text-sm text-muted-foreground mb-6","children":["October 21, 2025"," · ",3," min read · ","Gleam · Concurrency · TypeScript · Functional Programming · Learning"]}],["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$8"}}]]}]]}],"$undefined",null,["$","$L9",null,{"children":["$La","$Lb",null]}]]}],{},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","1drAQyr54w_qOCs_Ae2qj",{"children":[["$","$Lc",null,{"children":"$Ld"}],null]}],["$","$Le",null,{"children":"$Lf"}]]}],false]],"m":"$undefined","G":["$10","$undefined"],"s":false,"S":true}
+d:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+b:null
+f:[["$","title","0",{"children":"Learning Gleam Concurrency: A TypeScript Developer's Journey | Rubi Chandraputra | Rubi Chandraputra"}],["$","meta","1",{"name":"description","content":"Actor-based concurrency in Gleam vs async/await in TypeScript: two problems solved in both languages, and what the actor model changes."}],["$","meta","2",{"name":"author","content":"Rubi Chandraputra"}],["$","meta","3",{"name":"keywords","content":"software engineer,web development,full-stack,blog,Rubi Chandraputra"}],["$","meta","4",{"name":"creator","content":"Rubi Chandraputra"}]]
