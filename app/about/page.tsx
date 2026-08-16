@@ -87,6 +87,23 @@ export default function AboutPage() {
               </h3>
               <div className="space-y-4">
                 <div>
+                  <h4 className="font-medium">Technical Consultant</h4>
+                  <p className="text-sm text-muted-foreground">
+                    PT Artha Infotama • Jun 2025 - Present
+                  </p>
+                  <p className="text-muted-foreground mt-1">
+                    Design and build internal development frameworks — a
+                    project scaffolder, CLI, and shared runtime libraries —
+                    that standardize how new applications are created and run.
+                    Publish internal packages to a private Azure Artifacts feed
+                    with versioned releases. Build an MCP server that gives AI
+                    coding agents structured access to internal tooling and
+                    project context. Turn business consultant requirements into
+                    technical deliverables: scoping, architecture, and
+                    implementation of internal systems.
+                  </p>
+                </div>
+                <div>
                   <h4 className="font-medium">Software Engineer</h4>
                   <p className="text-sm text-muted-foreground">
                     Rakhasa Artha Wisesa • 2021 - Present
