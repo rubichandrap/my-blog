@@ -3,7 +3,7 @@
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Home, Menu } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -36,9 +36,12 @@ export function SiteHeader() {
         <div className="flex items-center gap-6 md:gap-10">
           <Link
             href="/"
-            className="font-serif text-lg font-bold tracking-tight md:text-xl"
+            aria-label="Home"
+            title="Home"
+            className="flex items-center text-foreground transition-colors hover:text-foreground/80"
           >
-            Rubi Chandraputra
+            <Home className="h-5 w-5" />
+            <span className="sr-only">Home</span>
           </Link>
           <nav className="hidden gap-6 md:flex">
             {routes.map(route => (
@@ -68,14 +71,7 @@ export function SiteHeader() {
               side="right"
               className="!inset-0 !h-[100dvh] !w-[100dvw] !max-w-none"
             >
-              <div className="flex h-full flex-col items-center justify-center gap-10 px-6 text-center">
-                <Link
-                  href="/"
-                  className="font-serif text-2xl font-bold tracking-tight"
-                  onClick={() => setOpen(false)}
-                >
-                  Rubi Chandraputra
-                </Link>
+              <div className="flex h-full flex-col items-center justify-center px-6 text-center">
                 <nav className="flex flex-col items-center gap-6">
                   {routes.map(route => (
                     <Link
