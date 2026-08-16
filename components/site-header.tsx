@@ -63,21 +63,25 @@ export function SiteHeader() {
                 <span className="sr-only">Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent title="Navigation Menu" side="right" className="pr-0">
-              <div className="flex flex-col gap-4 px-4">
+            <SheetContent
+              title="Navigation Menu"
+              side="right"
+              className="!inset-0 !h-[100dvh] !w-[100dvw] !max-w-none"
+            >
+              <div className="flex h-full flex-col items-center justify-center gap-10 px-6 text-center">
                 <Link
                   href="/"
-                  className="font-serif text-lg font-bold tracking-tight"
+                  className="font-serif text-2xl font-bold tracking-tight"
                   onClick={() => setOpen(false)}
                 >
                   Rubi Chandraputra
                 </Link>
-                <nav className="flex flex-col gap-4">
+                <nav className="flex flex-col items-center gap-6">
                   {routes.map(route => (
                     <Link
                       key={route.href}
                       href={route.href}
-                      className={`text-sm font-medium transition-colors hover:text-foreground/80 ${
+                      className={`text-xl font-medium transition-colors hover:text-foreground/80 ${
                         route.active ? 'text-foreground' : 'text-foreground/60'
                       }`}
                       onClick={() => setOpen(false)}

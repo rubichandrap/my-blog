@@ -1,5 +1,3 @@
-import me from '@/assets/images/me.png';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = {
@@ -29,16 +27,8 @@ export default function AboutPage() {
           <h1>About</h1>
         </div>
 
-        <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
-          <Image
-            src={me}
-            alt="Rubi Chandraputra"
-            width={160}
-            height={160}
-            className="rounded-md border border-border object-cover"
-          />
-          <div className="space-y-4">
-            <p className="mb-0">
+        <div className="space-y-4">
+          <p className="mb-0">
               I&apos;m a software engineer who started as a graphic designer.
               For four and a half years at Rakhasa Artha Wisesa (Jan 2021 –
               May 2025) I moved from frontend development into backend work
@@ -75,7 +65,6 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
-        </div>
 
         <section>
           <h2 className="border-t border-border pt-6">Professional Experience</h2>

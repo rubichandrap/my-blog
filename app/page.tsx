@@ -25,6 +25,13 @@ const HERO_LINKS: HeroLink[] = [
 
 const EXPERIENCES = [
   {
+    company: 'PT Artha Infotama',
+    role: 'Technical Consultant',
+    period: 'Jun 2025 – Present',
+    description:
+      'Design and build internal development frameworks — a project scaffolder, CLI, and shared runtime libraries — that standardize how new applications are created and run. Publish internal packages to a private Azure Artifacts feed. Build an MCP server that gives AI coding agents structured access to internal tooling. Turn business consultant requirements into technical deliverables: scoping, architecture, and implementation of internal systems.',
+  },
+  {
     company: 'Rakhasa Artha Wisesa',
     role: 'Software Engineer',
     subline: 'Frontend → Backend → Project Manager',
