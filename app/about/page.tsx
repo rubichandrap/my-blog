@@ -1,172 +1,194 @@
 import me from '@/assets/images/me.png';
-import { ExperienceSection } from '@/components/experience-section';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Github, Linkedin, Mail } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'About Me | Rubi Chandraputra',
+  title: 'About | Rubi Chandraputra',
   description:
-    'Learn more about Rubi Chandraputra, a software engineer with 5+ years of experience',
+    'Bio, experience, and skills of Rubi Chandraputra, software engineer in TypeScript, NestJS, and Go.',
 };
+
+const CONTACT_LINKS = [
+  { label: 'GitHub', href: 'https://github.com/rubichandrap', external: true },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/rubi-chandraputra-9aba65213/',
+    external: true,
+  },
+  { label: 'Email', href: 'mailto:rubichandrap@gmail.com' },
+];
 
 export default function AboutPage() {
   return (
-    <div className="container px-4 md:px-6 py-12 md:py-24 max-w-5xl mx-auto">
+    <div className="container mx-auto max-w-3xl px-4 md:px-6 py-12 md:py-24">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
-          <Link href="/" passHref>
-            <Button variant="ghost" className="w-fit gap-1 p-0 h-auto">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Home
-            </Button>
+          <Link href="/" className="text-sm">
+            Back to Home
           </Link>
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-            About Me
-          </h1>
+          <h1>About</h1>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-[1fr_2fr]">
-          <div className="flex flex-col gap-4 items-center md:items-start">
-            <Image
-              src={me}
-              alt="Rubi Chandraputra"
-              width={300}
-              height={300}
-              className="rounded-full object-cover"
-            />
-            <div className="flex gap-2">
-              <Button variant="ghost" size="icon" asChild>
-                <Link
-                  href="https://github.com/rubichandrap"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="h-5 w-5" />
-                  <span className="sr-only">GitHub</span>
-                </Link>
-              </Button>
-              <Button variant="ghost" size="icon" asChild>
-                <Link
-                  href="https://www.linkedin.com/in/rubi-chandraputra-9aba65213/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Linkedin className="h-5 w-5" />
-                  <span className="sr-only">LinkedIn</span>
-                </Link>
-              </Button>
-              <Button variant="ghost" size="icon" asChild>
-                <Link href="mailto:rubichandrap@gmail.com">
-                  <Mail className="h-5 w-5" />
-                  <span className="sr-only">Email</span>
-                </Link>
-              </Button>
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+          <Image
+            src={me}
+            alt="Rubi Chandraputra"
+            width={160}
+            height={160}
+            className="rounded-md border border-border object-cover"
+          />
+          <div className="space-y-4">
+            <p className="mb-0">
+              I&apos;m a software engineer who started as a graphic designer.
+              For four and a half years at Rakhasa Artha Wisesa (Jan 2021 –
+              May 2025) I moved from frontend development into backend work
+              and project management. I led the architecture of WCore, a
+              microservice platform whose services communicate through a gRPC
+              gateway, and introduced a code-generation mechanism that binds
+              services to the gateway automatically. I also led the
+              RumahBerkat migration, breaking a legacy monolith into
+              microservices.
+            </p>
+            <p className="mb-0">
+              Before software I was a graphic designer at Hai-O Enterprise
+              Bhd, producing promotional content and marketing assets in
+              Adobe Photoshop and Illustrator. I studied system information
+              at Universitas Saintek Muhammadiyah and graduated in 2023.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-2">
+              {CONTACT_LINKS.map((link, index) => (
+                <span key={link.label} className="flex items-center gap-x-2">
+                  {index > 0 && (
+                    <span aria-hidden="true" className="text-muted-foreground/50">
+                      ·
+                    </span>
+                  )}
+                  <Link
+                    href={link.href}
+                    {...(link.external
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                  >
+                    {link.label}
+                  </Link>
+                </span>
+              ))}
             </div>
           </div>
+        </div>
 
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold mb-2">
-                Hi, I&apos;m Rubi Chandraputra
-              </h2>
-              <p className="text-muted-foreground">
-                I&apos;m Rubi Chandraputra, a Software Engineer. My primary
-                language is TypeScript, and I have deep expertise in modern web
-                technologies including React, Next.js, Express, and NestJS. I’m
-                also proficient in working with Go and Python, which supports my
-                versatility across different tech stacks.
+        <section>
+          <h2 className="border-t border-border pt-6">Professional Experience</h2>
+
+          <div className="border-b border-border">
+            <div className="border-t border-border py-6">
+              <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
+                <h3 className="mb-0 text-lg font-semibold">PT Artha Infotama</h3>
+                <p className="mb-0 text-sm text-muted-foreground">
+                  Jun 2025 - Present
+                </p>
+              </div>
+              <p className="mb-0 mt-1">Technical Consultant</p>
+              <p className="mb-0 mt-1 text-muted-foreground">
+                Design and build internal development frameworks — a project
+                scaffolder, CLI, and shared runtime libraries — that
+                standardize how new applications are created and run. Publish
+                internal packages to a private Azure Artifacts feed with
+                versioned releases. Build an MCP server that gives AI coding
+                agents structured access to internal tooling and project
+                context. Turn business consultant requirements into technical
+                deliverables: scoping, architecture, and implementation of
+                internal systems.
               </p>
             </div>
 
-            <div>
-              <h3 className="text-xl font-bold mb-2">
-                Professional Experience
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-medium">Technical Consultant</h4>
-                  <p className="text-sm text-muted-foreground">
-                    PT Artha Infotama • Jun 2025 - Present
-                  </p>
-                  <p className="text-muted-foreground mt-1">
-                    Design and build internal development frameworks — a
-                    project scaffolder, CLI, and shared runtime libraries —
-                    that standardize how new applications are created and run.
-                    Publish internal packages to a private Azure Artifacts feed
-                    with versioned releases. Build an MCP server that gives AI
-                    coding agents structured access to internal tooling and
-                    project context. Turn business consultant requirements into
-                    technical deliverables: scoping, architecture, and
-                    implementation of internal systems.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Software Engineer</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Rakhasa Artha Wisesa • 2021 - Present
-                  </p>
-                  <p className="text-muted-foreground mt-1">
-                    Defined architecture for connecting multiple services into
-                    modular microservices. Managed project timelines and
-                    coordination across teams. Handled the gRPC Gateway to allow
-                    HTTP communication between clients and services. Introduced
-                    a custom service bindings mechanism using code generation to
-                    automatically bind services to the gateway.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium">Graphic Designer</h4>
-                  <p className="text-sm text-muted-foreground">
-                    HAI-O • 2018 - 2019
-                  </p>
-                  <p className="text-muted-foreground mt-1">
-                    Created compelling promotional content and marketing assets
-                    using Adobe Photoshop and Adobe Illustrator. Designed online
-                    posters, banners, and social media visuals that aligned with
-                    branding strategies and campaign goals. Collaborated with
-                    marketing teams to deliver creative assets on schedule and
-                    tailored to audience engagement.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-2">Skills</h3>
-              <div className="flex flex-wrap gap-2">
-                <Badge>JavaScript</Badge>
-                <Badge>TypeScript</Badge>
-                <Badge>React</Badge>
-                <Badge>Next.js</Badge>
-                <Badge>Vue.js</Badge>
-                <Badge>Node.js</Badge>
-                <Badge>Express</Badge>
-                <Badge>NestJS</Badge>
-                <Badge>MongoDB</Badge>
-                <Badge>PostgreSQL</Badge>
-                <Badge>Docker</Badge>
-                <Badge>Git</Badge>
-                <Badge>RESTful APIs</Badge>
-                <Badge>GraphQL</Badge>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-2">Education</h3>
-              <div>
-                <h4 className="font-medium">Bachelor of System Information</h4>
-                <p className="text-sm text-muted-foreground">
-                  Universitas Saintek Muhammadiyah • 2017 - 2023
+            <div className="border-t border-border py-6">
+              <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
+                <h3 className="mb-0 text-lg font-semibold">
+                  Rakhasa Artha Wisesa
+                </h3>
+                <p className="mb-0 text-sm text-muted-foreground">
+                  Jan 2021 – May 2025
                 </p>
               </div>
+              <p className="mb-0 mt-1">
+                Software Engineer
+                <span className="text-muted-foreground">
+                  {' '}
+                  — Frontend → Backend → Project Manager
+                </span>
+              </p>
+              <ul className="mb-0 mt-2 space-y-1 text-muted-foreground">
+                <li>
+                  Defined architecture for connecting multiple services into
+                  modular microservices (WCore).
+                </li>
+                <li>
+                  Managed project timelines and coordination across teams.
+                </li>
+                <li>
+                  Handled the gRPC Gateway to allow HTTP communication between
+                  clients and services.
+                </li>
+                <li>
+                  Introduced a custom service bindings mechanism using code
+                  generation to automatically bind services to the gateway.
+                </li>
+                <li>
+                  Led the transition of a legacy monolithic system into a
+                  microservice-based architecture (RumahBerkat migration).
+                </li>
+                <li>
+                  Facilitated planning, module separation, and team
+                  coordination throughout the migration.
+                </li>
+              </ul>
+            </div>
+
+            <div className="border-t border-border py-6">
+              <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
+                <h3 className="mb-0 text-lg font-semibold">
+                  Hai-O Enterprise Bhd
+                </h3>
+                <p className="mb-0 text-sm text-muted-foreground">
+                  Jan 2018 – Jan 2019
+                </p>
+              </div>
+              <p className="mb-0 mt-1">Graphic Designer</p>
+              <p className="mb-0 mt-1 text-muted-foreground">
+                Created compelling promotional content and marketing assets
+                using Adobe Photoshop and Adobe Illustrator. Designed online
+                posters, banners, and social media visuals that aligned with
+                branding strategies and campaign goals. Collaborated with
+                marketing teams to deliver creative assets on schedule and
+                tailored to audience engagement.
+              </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        <ExperienceSection />
+        <section>
+          <h2 className="border-t border-border pt-6">Skills</h2>
+          <p className="mb-0 text-muted-foreground">
+            Languages: TypeScript, JavaScript, Go, Python. Frameworks and
+            libraries: React, Next.js, Vue.js, Node.js, Express, NestJS,
+            Turborepo. Data and infrastructure: PostgreSQL, MongoDB, Docker,
+            Apache Kafka, gRPC, GraphQL, REST APIs, buf. Tools and design:
+            Git, Adobe Photoshop, Adobe Illustrator.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="border-t border-border pt-6">Education</h2>
+          <div className="border-t border-border py-6">
+            <h3 className="mb-0 text-lg font-semibold">
+              Bachelor of System Information
+            </h3>
+            <p className="mb-0 mt-1 text-sm text-muted-foreground">
+              Universitas Saintek Muhammadiyah • 2017 – 2023
+            </p>
+          </div>
+        </section>
       </div>
     </div>
   );
