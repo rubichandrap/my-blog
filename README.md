@@ -1,38 +1,45 @@
-# Rubi Chandraputra - Personal Website & Blog
+# my-blog
 
-A modern, responsive personal website and blog built with Next.js, Tailwind CSS, and shadcn/ui components. This project provides a clean, professional platform for software engineers to showcase their expertise and share their thoughts through blog posts.
+Personal site and blog of Rubi Chandraputra, a software engineer. The site
+is a static export hosted on GitHub Pages at
+https://rubichandrap.github.io/my-blog.
 
-## Features
+## Stack
 
-- 🎨 **Modern Design** - Clean, professional UI with dark/light mode support
-- 📱 **Fully Responsive** - Optimized for all device sizes
-- 📝 **Blog Platform** - Ready-to-use blog system with featured posts
-- 🧩 **Component-Based** - Built with reusable React components
-- 🔍 **SEO Friendly** - Optimized metadata for better search engine visibility
-- 🚀 **Performance Optimized** - Fast loading times and optimized assets
-- 🌐 **Accessible** - Built with accessibility in mind
+- Next.js 15 (App Router, `output: "export"`)
+- Tailwind CSS
+- shadcn-style UI components (Radix primitives)
+- lucide-react icons
+- next-themes for light/dark mode
+- Static export deployed to GitHub Pages via gh-pages
 
-## Tech Stack
+## Requirements
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Theming**: Next-themes for dark/light mode
-- **Deployment**: [Vercel](https://vercel.com/)
+- Node.js 18.18 or later
+- pnpm
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18.17.0 or later
-- npm or yarn or pnpm
-
-### Installation
-
-1. Clone the repository:
+## Run locally
 
 ```bash
-git clone https://github.com/rubichandrap/my-blog.git
-cd my-blog
+pnpm install
+pnpm dev
 ```
+
+Open http://localhost:3000/my-blog.
+
+## Build and deploy
+
+```bash
+pnpm build      # static export to out/
+pnpm deploy     # publish out/ to GitHub Pages
+```
+
+The site is served under the `/my-blog` base path. The contact form sends
+mail through EmailJS; its keys are read from environment variables (see
+`.env.example`) and never committed.
+
+## Content
+
+Blog posts live in `lib/blog.ts`. The blog publishes only posts the author
+wrote: one on Gleam's concurrency model, and one on the CAP theorem in
+distributed systems.

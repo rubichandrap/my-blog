@@ -11,7 +11,8 @@ export const metadata: Metadata = {
     default: 'Rubi Chandraputra - Software Engineer',
     template: '%s | Rubi Chandraputra',
   },
-  description: 'My Personal Blog',
+  description:
+    'Personal site and blog of Rubi Chandraputra, a software engineer building web applications and backend services in TypeScript, NestJS, and Go.',
   keywords: [
     'software engineer',
     'web development',
