@@ -10,539 +10,75 @@ export interface BlogPost {
   featured: boolean;
 }
 
-// Sample blog posts data
+// Blog posts
 const blogPosts: BlogPost[] = [
   {
     slug: 'understanding-the-cap-theorem',
     title: 'Understanding the CAP Theorem in Distributed Systems',
     date: 'May 1, 2023',
     excerpt:
-      'A deep dive into the CAP theorem and its implications for distributed systems design.',
-    readingTime: 10,
+      'A practical look at the CAP theorem: what consistency, availability, and partition tolerance mean, and how real systems choose between them.',
+    readingTime: 2,
     tags: ['Distributed Systems', 'CAP Theorem', 'Architecture'],
-    coverImage: 'https://picsum.photos/seed/understanding-cap-theorem/1200/630',
-    content: `<h1>📚 Understanding the CAP Theorem: Why It Matters in Distributed Systems</h1>
-
-  <p>
-    When building or maintaining distributed systems—whether it's a global-scale web application, a microservices architecture, or a cloud-based platform—you’ll eventually run into the <strong>CAP Theorem</strong>. It’s one of those core principles that’s easy to overlook, but absolutely essential to get right if you want your system to be <strong>reliable</strong>, <strong>available</strong>, and <strong>performant</strong>.
-  </p>
-
-  <h2>🧠 What is the CAP Theorem?</h2>
-
-  <p>
-    The <strong>CAP Theorem</strong>, introduced by computer scientist <em>Eric Brewer</em> in 2000, states that in any <strong>distributed data system</strong>, you can only guarantee <strong>two out of the following three properties</strong> at the same time:
+    coverImage: '',
+    content: `<p>
+    Eric Brewer introduced the CAP theorem in 2000. It says a distributed data
+    system can guarantee only two of three properties at the same time:
+    consistency, availability, and partition tolerance.
   </p>
 
   <ol>
-    <li><strong>Consistency (C)</strong> – Every read receives the most recent write or an error.</li>
-    <li><strong>Availability (A)</strong> – Every request receives a response, even if it’s not the most recent one.</li>
-    <li><strong>Partition Tolerance (P)</strong> – The system continues to operate despite network partitions (communication issues between nodes).</li>
+    <li><strong>Consistency</strong>: every read returns the most recent write, or an error.</li>
+    <li><strong>Availability</strong>: every request receives a response, even if the data is not the most recent.</li>
+    <li><strong>Partition tolerance</strong>: the system keeps operating while network communication between nodes is broken.</li>
   </ol>
 
-  <blockquote>
-    <strong>TL;DR:</strong> You can’t have <em>all three</em> at once. At best, you choose <em>two</em>, and sacrifice the third depending on your system’s goals.
-  </blockquote>
-
-  <h2>📊 Visualizing the Trade-off</h2>
+  <h2>Why you can only pick two</h2>
 
   <p>
-    Imagine a triangle where each corner represents C, A, and P:
+    During a partition, nodes cannot reach each other. A node that receives a
+    request has two options: answer with the data it has, or refuse to answer
+    until it can confirm the data is current. It cannot do both. Partitions are
+    not a question of if but when, so practical systems assume partition
+    tolerance and choose between consistency and availability.
+  </p>
+
+  <h2>CP and AP in practice</h2>
+
+  <p>
+    A CP system may reject requests during a partition rather than serve stale
+    data. An AP system keeps responding, possibly with data that is out of date.
+    The databases most teams use sit on one side of this choice:
   </p>
 
   <ul>
-    <li><strong>CA (Consistency + Availability)</strong>: Only works if there's no network partition—unrealistic in distributed environments.</li>
-    <li><strong>CP (Consistency + Partition Tolerance)</strong>: The system may become unavailable during a partition to maintain consistency.</li>
-    <li><strong>AP (Availability + Partition Tolerance)</strong>: The system stays up but may return stale or inconsistent data.</li>
+    <li><strong>CP</strong>: HBase, BigTable, Zookeeper, etcd</li>
+    <li><strong>AP</strong>: MongoDB, CouchDB, DynamoDB (with tunable consistency)</li>
   </ul>
 
-  <p>
-    Since network partitions <em>will</em> happen, we always assume <strong>Partition Tolerance</strong> is necessary. That means choosing between <strong>Consistency</strong> and <strong>Availability</strong>.
-  </p>
-
-  <h2>🧩 Why Is It Important?</h2>
-
-  <h3>1. System Design Decisions</h3>
-  <p>
-    Understanding CAP helps you make architectural trade-offs. Do you value strict data consistency (e.g., in financial systems) or high availability (e.g., in social apps)?
-  </p>
-
-  <h3>2. Choose the Right Database</h3>
-  <p>
-    Different databases favor different CAP combinations:
-  </p>
-  <ul>
-    <li><strong>MongoDB, CouchDB</strong> → AP</li>
-    <li><strong>HBase, BigTable</strong> → CP</li>
-    <li><strong>Zookeeper, etcd</strong> → CP</li>
-    <li><strong>DynamoDB</strong> → AP with tunable consistency</li>
-  </ul>
-
-  <h3>3. Prepare for Failures Gracefully</h3>
-  <p>
-    Knowing CAP helps you plan fallback mechanisms, retries, and error handling suited to your system's tolerance.
-  </p>
-
-  <h3>4. Set Realistic Expectations</h3>
-  <p>
-    You can’t promise 100% consistency and availability during a network issue. CAP helps set realistic boundaries for stakeholders.
-  </p>
-
-  <h2>🚧 Real-World Examples</h2>
-
-  <ul>
-    <li><strong>Banking Systems (CP)</strong>: Consistency is critical. It’s better to return an error than serve outdated info.</li>
-    <li><strong>E-Commerce Cart (AP)</strong>: Users can still add items even if the backend can’t confirm the latest state right away.</li>
-  </ul>
-
-  <h2>⚖️ CAP is a Guideline, Not a Law</h2>
+  <h2>Choosing per operation</h2>
 
   <p>
-    CAP is a <em>theoretical model</em>. Many real-world systems implement <strong>tunable consistency</strong>, letting you choose the right behavior depending on the operation (e.g., strong consistency for payments, eventual consistency for analytics).
-  </p>
-
-  <h2>🧠 Takeaway</h2>
-
-  <p>
-    If you’re building or maintaining distributed systems, <strong>you can’t ignore CAP</strong>. It helps you design systems that balance consistency, availability, and resilience under failure.
+    The right trade-off depends on the operation. A bank transfer should be CP:
+    better to return an error than to let the same balance be spent twice. An
+    e-commerce cart can be AP: a user adds an item and it succeeds even when the
+    backend cannot confirm the latest state right away.
   </p>
 
   <p>
-    So next time someone asks about consistency vs availability, you’ll know it’s not just theory—it’s the foundation of practical system design.
+    CAP is a model, not a law. Systems with tunable consistency pick a level per
+    operation — strong consistency for payments, eventual consistency for
+    analytics — so the choice is rarely a single setting for the whole system.
   </p>`,
     featured: true,
-  },
-  {
-    slug: 'modern-react-state-management',
-    title: 'Modern React State Management: Beyond Redux',
-    date: 'April 15, 2023',
-    excerpt:
-      'Exploring modern state management solutions in React applications and when to use each approach.',
-    readingTime: 8,
-    tags: ['React', 'JavaScript', 'State Management', 'Frontend'],
-    coverImage:
-      'https://picsum.photos/seed/modern-react-state-management/1200/630',
-    content: `
-      <p>State management is one of the most critical aspects of building React applications. For years, Redux has been the go-to solution for managing state in complex React applications. However, the React ecosystem has evolved significantly, and there are now several alternatives that might be better suited for your specific use case.</p>
-      
-      <h2>The Evolution of State Management in React</h2>
-      <p>When React was first introduced, component state was the primary way to manage state. As applications grew more complex, patterns like prop drilling emerged, leading to the development of more sophisticated state management solutions.</p>
-      
-      <h3>Context API + useReducer</h3>
-      <p>With the introduction of Hooks in React 16.8, the Context API combined with useReducer became a powerful alternative to Redux for many applications. This approach provides a way to share state across components without prop drilling, while maintaining a predictable state update pattern similar to Redux.</p>
-      
-      <pre><code>// Example of Context API with useReducer
-import React, { createContext, useReducer, useContext } from 'react';
-
-const CounterContext = createContext();
-
-const initialState = { count: 0 };
-
-function counterReducer(state, action) {
-  switch (action.type) {
-    case 'increment':
-      return { count: state.count + 1 };
-    case 'decrement':
-      return { count: state.count - 1 };
-    default:
-      return state;
-  }
-}
-
-export function CounterProvider({ children }) {
-  const [state, dispatch] = useReducer(counterReducer, initialState);
-  return (
-    <CounterContext.Provider value={{ state, dispatch }}>
-      {children}
-    </CounterContext.Provider>
-  );
-}
-
-export function useCounter() {
-  return useContext(CounterContext);
-}</code></pre>
-      
-      <h3>Zustand</h3>
-      <p>Zustand is a small, fast, and scalable state management solution. It uses a simplified flux principles and doesn't require providers, making it very easy to use.</p>
-      
-      <h3>Jotai</h3>
-      <p>Jotai takes an atomic approach to state management, allowing you to build state by combining atoms. This makes it particularly well-suited for applications with frequently changing UI states.</p>
-      
-      <h2>When to Use Each Solution</h2>
-      <p>The best state management solution depends on your specific requirements:</p>
-      <ul>
-        <li><strong>useState</strong>: For simple component-level state that doesn't need to be shared.</li>
-        <li><strong>Context + useReducer</strong>: For sharing state across components in a medium-sized application.</li>
-        <li><strong>Redux</strong>: For large applications with complex state logic and many developers.</li>
-        <li><strong>Zustand/Jotai</strong>: For applications that need a lightweight solution with good performance.</li>
-      </ul>
-      
-      <h2>Conclusion</h2>
-      <p>The React ecosystem now offers a variety of state management solutions, each with its own strengths. By understanding the trade-offs between these options, you can choose the right tool for your specific needs, leading to more maintainable and performant applications.</p>
-    `,
-    featured: true,
-  },
-  {
-    slug: 'typescript-best-practices',
-    title: 'TypeScript Best Practices for Large-Scale Applications',
-    date: 'March 10, 2023',
-    excerpt:
-      'Learn how to effectively use TypeScript to build maintainable and scalable applications.',
-    readingTime: 10,
-    tags: ['TypeScript', 'JavaScript', 'Best Practices', 'Architecture'],
-    coverImage: 'https://picsum.photos/seed/typescript-best-practices/1200/630',
-    content: `
-      <p>TypeScript has become the language of choice for many developers building large-scale applications. Its static typing system helps catch errors early and provides better tooling support. However, using TypeScript effectively requires following certain best practices.</p>
-      
-      <h2>Type Everything (Almost)</h2>
-      <p>One of the main benefits of TypeScript is its type system. To get the most out of it, you should type as much of your code as possible. This includes function parameters, return types, and variables.</p>
-      
-      <pre><code>// Bad
-function processUser(user) {
-  return {
-    id: user.id,
-    name: user.name,
-    isActive: user.status === 'active'
-  };
-}
-
-// Good
-interface User {
-  id: string;
-  name: string;
-  status: 'active' | 'inactive';
-}
-
-interface ProcessedUser {
-  id: string;
-  name: string;
-  isActive: boolean;
-}
-
-function processUser(user: User): ProcessedUser {
-  return {
-    id: user.id,
-    name: user.name,
-    isActive: user.status === 'active'
-  };
-}</code></pre>
-      
-      <h2>Use Strict Mode</h2>
-      <p>Enable strict mode in your tsconfig.json to catch more potential issues:</p>
-      
-      <pre><code>{
-  "compilerOptions": {
-    "strict": true,
-    // Other options...
-  }
-}</code></pre>
-      
-      <h2>Leverage Union Types and Discriminated Unions</h2>
-      <p>Union types are a powerful feature of TypeScript that allows a value to be one of several types. Discriminated unions take this a step further by adding a common property that TypeScript can use to narrow down the type.</p>
-      
-      <pre><code>// Union type
-type Result = Success | Error;
-
-// Discriminated union
-interface Success {
-  type: 'success';
-  data: any;
-}
-
-interface Error {
-  type: 'error';
-  message: string;
-}
-
-function handleResult(result: Result) {
-  if (result.type === 'success') {
-    // TypeScript knows result is Success here
-    console.log(result.data);
-  } else {
-    // TypeScript knows result is Error here
-    console.error(result.message);
-  }
-}</code></pre>
-      
-      <h2>Use Type Inference When Appropriate</h2>
-      <p>While explicit typing is generally good, TypeScript's type inference is quite powerful. Use it when the types are obvious to avoid unnecessary verbosity.</p>
-      
-      <pre><code>// Unnecessary explicit typing
-const numbers: number[] = [1, 2, 3].map((num: number): number => num * 2);
-
-// Better - let TypeScript infer the types
-const numbers = [1, 2, 3].map(num => num * 2);</code></pre>
-      
-      <h2>Organize Types in Separate Files</h2>
-      <p>For large applications, organize your types in separate files to improve maintainability. Consider creating a types directory with subdirectories for different domains of your application.</p>
-      
-      <h2>Use Utility Types</h2>
-      <p>TypeScript provides several utility types that can help you transform existing types in useful ways:</p>
-      
-      <pre><code>interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: Date;
-}
-
-// Create a type with all properties optional
-type PartialUser = Partial<User>;
-
-// Create a type with only specified properties
-type UserBasicInfo = Pick<User, 'id' | 'name'>;
-
-// Create a type excluding specified properties
-type UserWithoutDates = Omit<User, 'createdAt'>;</code></pre>
-      
-      <h2>Conclusion</h2>
-      <p>By following these best practices, you can leverage TypeScript effectively to build more maintainable and robust applications. Remember that the goal of TypeScript is to enhance your development experience and catch errors early, not to make your code more complex.</p>
-    `,
-    featured: true,
-  },
-  {
-    slug: 'microservices-architecture',
-    title: 'Microservices Architecture: Patterns and Pitfalls',
-    date: 'February 5, 2023',
-    excerpt:
-      'An in-depth look at microservices architecture patterns and common pitfalls to avoid.',
-    readingTime: 12,
-    tags: ['Architecture', 'Microservices', 'Backend', 'System Design'],
-    coverImage:
-      'https://picsum.photos/seed/microservices-architecture/1200/630',
-    content: `
-      <p>Microservices architecture has become increasingly popular for building complex, scalable applications. By breaking down a monolithic application into smaller, independent services, teams can develop, deploy, and scale services independently. However, implementing microservices comes with its own set of challenges.</p>
-      
-      <h2>Key Patterns in Microservices Architecture</h2>
-      
-      <h3>API Gateway Pattern</h3>
-      <p>An API Gateway serves as a single entry point for all clients. It handles requests in one of two ways: some requests are simply proxied/routed to the appropriate service, while others are fanned out to multiple services.</p>
-      
-      <h3>Database per Service</h3>
-      <p>Each microservice should have its own database to ensure loose coupling. This allows each service to use the type of database best suited to its needs.</p>
-      
-      <h3>Event Sourcing</h3>
-      <p>Event sourcing involves storing all changes to the application state as a sequence of events. This can be particularly useful in microservices architectures for maintaining data consistency across services.</p>
-      
-      <h3>CQRS (Command Query Responsibility Segregation)</h3>
-      <p>CQRS separates read and write operations to different models. This can improve performance, scalability, and security while making the system more maintainable.</p>
-      
-      <h3>Circuit Breaker Pattern</h3>
-      <p>The circuit breaker pattern prevents a cascade of failures when a service is down. It detects failures and encapsulates the logic of preventing a failure from constantly recurring.</p>
-      
-      <h2>Common Pitfalls to Avoid</h2>
-      
-      <h3>Starting with Microservices</h3>
-      <p>One of the biggest mistakes is starting with microservices before understanding the domain well enough. It's often better to start with a monolith and extract microservices as the domain boundaries become clearer.</p>
-      
-      <h3>Ignoring Data Consistency</h3>
-      <p>In a microservices architecture, maintaining data consistency across services is challenging. Implementing patterns like Saga or using eventual consistency is crucial.</p>
-      
-      <h3>Overlooking Monitoring and Observability</h3>
-      <p>With multiple services communicating with each other, proper monitoring, logging, and tracing become essential for debugging and performance optimization.</p>
-      
-      <h3>Inappropriate Service Boundaries</h3>
-      <p>Defining service boundaries based on technical concerns rather than business capabilities can lead to tightly coupled services that are difficult to maintain.</p>
-      
-      <h3>Distributed Monolith</h3>
-      <p>If microservices are tightly coupled and cannot be deployed independently, you end up with a distributed monolith—combining the complexity of microservices with the rigidity of a monolith.</p>
-      
-      <h2>When to Use Microservices</h2>
-      <p>Microservices are not a silver bullet. They are most beneficial when:</p>
-      <ul>
-        <li>The application is complex enough to warrant separation of concerns</li>
-        <li>Different parts of the application have different scaling requirements</li>
-        <li>The team is large enough to work on separate services</li>
-        <li>The organization values the ability to deploy services independently</li>
-      </ul>
-      
-      <h2>Conclusion</h2>
-      <p>Microservices architecture offers significant benefits for complex applications, but it comes with its own set of challenges. By understanding common patterns and avoiding typical pitfalls, you can successfully implement a microservices architecture that meets your organization's needs.</p>
-    `,
-    featured: true,
-  },
-  {
-    slug: 'web-performance-optimization',
-    title: 'Web Performance Optimization Techniques for Modern Applications',
-    date: 'January 20, 2023',
-    excerpt:
-      "Learn how to optimize your web application's performance for better user experience and higher conversion rates.",
-    readingTime: 9,
-    tags: ['Performance', 'Web Development', 'Frontend', 'Optimization'],
-    coverImage:
-      'https://picsum.photos/seed/web-performance-optimization/1200/630',
-    content: `
-      <p>Web performance has a direct impact on user experience and business metrics. Studies have shown that even a one-second delay in page load time can result in a 7% reduction in conversions. In this article, we'll explore various techniques to optimize web performance.</p>
-      
-      <h2>Core Web Vitals</h2>
-      <p>Google's Core Web Vitals are a set of specific factors that Google considers important for user experience:</p>
-      <ul>
-        <li><strong>Largest Contentful Paint (LCP)</strong>: Measures loading performance. To provide a good user experience, LCP should occur within 2.5 seconds of when the page first starts loading.</li>
-        <li><strong>First Input Delay (FID)</strong>: Measures interactivity. Pages should have a FID of less than 100 milliseconds.</li>
-        <li><strong>Cumulative Layout Shift (CLS)</strong>: Measures visual stability. Pages should maintain a CLS of less than 0.1.</li>
-      </ul>
-      
-      <h2>Image Optimization</h2>
-      <p>Images often account for most of the downloaded bytes on a web page. Optimizing them can significantly improve performance:</p>
-      
-      <h3>Use Modern Image Formats</h3>
-      <p>WebP, AVIF, and JPEG XL offer better compression than traditional formats like JPEG and PNG.</p>
-      
-      <h3>Responsive Images</h3>
-      <p>Use the srcset attribute to provide different image sizes for different devices:</p>
-      
-      <pre><code>&lt;img 
-  srcset="small.jpg 500w, medium.jpg 1000w, large.jpg 1500w" 
-  sizes="(max-width: 600px) 500px, (max-width: 1200px) 1000px, 1500px" 
-  src="fallback.jpg" 
-  alt="Description"
-&gt;</code></pre>
-      
-      <h3>Lazy Loading</h3>
-      <p>Load images only when they're about to enter the viewport:</p>
-      
-      <pre><code>&lt;img src="image.jpg" loading="lazy" alt="Description"&gt;</code></pre>
-      
-      <h2>JavaScript Optimization</h2>
-      
-      <h3>Code Splitting</h3>
-      <p>Split your JavaScript bundle into smaller chunks that can be loaded on demand:</p>
-      
-      <pre><code>// Using dynamic import in React
-import React, { lazy, Suspense } from 'react';
-
-const HeavyComponent = lazy(() => import('./HeavyComponent'));
-
-function App() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HeavyComponent />
-    </Suspense>
-  );
-}</code></pre>
-      
-      <h3>Tree Shaking</h3>
-      <p>Remove unused code from your JavaScript bundles. Most modern bundlers like Webpack, Rollup, and esbuild support tree shaking.</p>
-      
-      <h3>Defer Non-Critical JavaScript</h3>
-      <p>Use the defer attribute to prevent JavaScript from blocking the parsing of HTML:</p>
-      
-      <pre><code>&lt;script src="non-critical.js" defer&gt;&lt;/script&gt;</code></pre>
-      
-      <h2>CSS Optimization</h2>
-      
-      <h3>Critical CSS</h3>
-      <p>Inline critical CSS in the head of your HTML to reduce render-blocking:</p>
-      
-      <pre><code>&lt;head&gt;
-  &lt;style&gt;
-    /* Critical CSS here */
-    body { font-family: sans-serif; margin: 0; }
-    header { background-color: #f8f9fa; padding: 1rem; }
-  &lt;/style&gt;
-  &lt;link rel="stylesheet" href="non-critical.css" media="print" onload="this.media='all'"&gt;
-&lt;/head&gt;</code></pre>
-      
-      <h3>Reduce Unused CSS</h3>
-      <p>Tools like PurgeCSS can remove unused CSS from your stylesheets.</p>
-      
-      <h2>Caching Strategies</h2>
-      
-      <h3>HTTP Caching</h3>
-      <p>Use appropriate Cache-Control headers to leverage browser caching:</p>
-      
-      <pre><code>Cache-Control: max-age=31536000, immutable</code></pre>
-      
-      <h3>Service Workers</h3>
-      <p>Implement a service worker to cache assets and enable offline functionality:</p>
-      
-      <pre><code>// Register a service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js');
-  });
-}</code></pre>
-      
-      <h2>Conclusion</h2>
-      <p>Web performance optimization is an ongoing process. By focusing on Core Web Vitals and implementing the techniques discussed in this article, you can significantly improve your web application's performance, leading to better user experience and higher conversion rates.</p>
-    `,
-    featured: false,
-  },
-  {
-    slug: 'serverless-architecture',
-    title: 'Serverless Architecture: Benefits and Challenges',
-    date: 'December 12, 2022',
-    excerpt:
-      'Explore the benefits and challenges of serverless architecture and how it can transform your application development.',
-    readingTime: 7,
-    tags: ['Serverless', 'Cloud Computing', 'Architecture', 'AWS Lambda'],
-    coverImage: 'https://picsum.photos/seed/serverless-architecture/1200/630',
-    content: `
-      <p>Serverless architecture has gained significant popularity in recent years. Despite its name, serverless doesn't mean there are no servers; it means that developers don't have to manage servers. Instead, cloud providers handle the infrastructure, allowing developers to focus solely on writing code.</p>
-      
-      <h2>Benefits of Serverless Architecture</h2>
-      
-      <h3>Reduced Operational Costs</h3>
-      <p>With serverless, you only pay for the compute time you consume. There's no charge when your code isn't running, making it cost-effective for applications with variable traffic.</p>
-      
-      <h3>Automatic Scaling</h3>
-      <p>Serverless platforms automatically scale your application in response to traffic. You don't need to provision resources in advance or implement auto-scaling logic.</p>
-      
-      <h3>Faster Time to Market</h3>
-      <p>By eliminating the need to manage infrastructure, serverless allows developers to focus on business logic, leading to faster development cycles.</p>
-      
-      <h3>Reduced Operational Complexity</h3>
-      <p>With serverless, you don't have to worry about server maintenance, security patches, or operating system updates.</p>
-      
-      <h2>Challenges of Serverless Architecture</h2>
-      
-      <h3>Cold Starts</h3>
-      <p>When a function hasn't been invoked for a while, the cloud provider might shut down its container. The next invocation will require starting a new container, leading to increased latency known as a "cold start."</p>
-      
-      <h3>Vendor Lock-in</h3>
-      <p>Serverless offerings vary between cloud providers, and migrating from one provider to another can be challenging.</p>
-      
-      <h3>Limited Execution Duration</h3>
-      <p>Most serverless platforms have a maximum execution duration for functions. For example, AWS Lambda functions can run for up to 15 minutes.</p>
-      
-      <h3>Debugging and Monitoring</h3>
-      <p>Debugging serverless applications can be more complex due to their distributed nature. Proper monitoring and logging are essential.</p>
-      
-      <h2>Popular Serverless Platforms</h2>
-      
-      <h3>AWS Lambda</h3>
-      <p>AWS Lambda is one of the most popular serverless platforms. It supports multiple languages and integrates seamlessly with other AWS services.</p>
-      
-      <h3>Azure Functions</h3>
-      <p>Microsoft's serverless offering, Azure Functions, supports a wide range of languages and integrates well with the Azure ecosystem.</p>
-      
-      <h3>Google Cloud Functions</h3>
-      <p>Google Cloud Functions is Google's serverless platform, offering tight integration with other Google Cloud services.</p>
-      
-      <h3>Vercel</h3>
-      <p>Vercel provides a serverless platform optimized for frontend applications, with a focus on Next.js deployments.</p>
-      
-      <h2>When to Use Serverless</h2>
-      <p>Serverless architecture is particularly well-suited for:</p>
-      <ul>
-        <li>Applications with variable or unpredictable traffic</li>
-        <li>Microservices architectures</li>
-        <li>Event-driven applications</li>
-        <li>APIs with low to moderate traffic</li>
-        <li>Background processing tasks</li>
-      </ul>
-      
-      <h2>Conclusion</h2>
-      <p>Serverless architecture offers significant benefits in terms of cost, scalability, and developer productivity. However, it also comes with challenges that need to be addressed. By understanding these trade-offs, you can make an informed decision about whether serverless is the right choice for your application.</p>
-    `,
-    featured: false,
   },
   {
     slug: 'gleam-concurrency-vs-typescript',
     title: "Learning Gleam Concurrency: A TypeScript Developer's Journey",
     date: 'October 21, 2025',
     excerpt:
-      "Discovering Gleam's actor-based concurrency model after years of async/await in TypeScript - it's like learning a new superpower!",
-    readingTime: 8,
+      'Actor-based concurrency in Gleam vs async/await in TypeScript: two problems solved in both languages, and what the actor model changes.',
+    readingTime: 3,
     tags: [
       'Gleam',
       'Concurrency',
@@ -550,29 +86,28 @@ if ('serviceWorker' in navigator) {
       'Functional Programming',
       'Learning',
     ],
-    coverImage: 'https://picsum.photos/seed/gleam-concurrency/1200/630',
-    content: `<h1>🚀 Learning Gleam Concurrency: A TypeScript Developer's Journey</h1>
+    coverImage: '',
+    content: `<p>
+    I wrote async/await TypeScript for years before I tried Gleam. Its
+    concurrency model is different enough that it took me a while to stop
+    thinking in promises. These are two problems I solved in both languages, and
+    what the actor model changed for me.
+  </p>
 
-<p>
-  So here I am, diving into <strong>Gleam</strong> after years of wrestling with async/await in TypeScript, and let me tell you - it's like discovering a completely different way to think about concurrency! 🧠✨
-</p>
+  <h2>The TypeScript way</h2>
 
-<p>
-  If you're like me and have been living in the TypeScript world for a while, Gleam's actor-based concurrency model might feel like learning to drive a manual car after years of automatic. It's different, it's powerful, and honestly? It's pretty darn cool once you get the hang of it.
-</p>
+  <p>
+    In TypeScript, concurrent work is orchestrated with <code>async/await</code>
+    and <code>Promise</code>. State is shared across async boundaries, which
+    means you think about who can mutate what, and when:
+  </p>
 
-<h2>🤔 The TypeScript Way vs The Gleam Way</h2>
-
-<p>
-  In TypeScript, we're all about <code>async/await</code>, <code>Promises</code>, and managing state across async boundaries. It's like juggling - you need to keep track of what's happening where and when.
-</p>
-
-<pre><code>// TypeScript: The async/await dance
+  <pre><code>// TypeScript: fetch a user and their posts and comments
 async function fetchUserData(userId: string): Promise<User> {
   const user = await fetchUser(userId);
   const posts = await fetchUserPosts(userId);
   const comments = await fetchUserComments(userId);
-  
+
   return {
     ...user,
     posts,
@@ -580,27 +115,30 @@ async function fetchUserData(userId: string): Promise<User> {
   };
 }
 
-// What if one of these fails? 😅
+// What if one of these fails?
 // What if we want to cancel the whole operation?
 // What if we need to share state between these calls?</code></pre>
 
-<p>
-  Now, in Gleam, we have <strong>actors</strong> - these are lightweight processes that can send and receive messages. Think of them as tiny workers that can only communicate by passing messages. No shared state, no race conditions, just pure message passing! 🎯
-</p>
+  <p>
+    Gleam takes a different route: actors. An actor is a lightweight process that
+    owns its state and communicates only by sending and receiving messages. No
+    shared state, no locks, no race conditions — the only way in or out is a
+    message.
+  </p>
 
-<h2>🎯 Example 1: Building a Simple Chat System</h2>
+  <h2>Example 1: a chat system</h2>
 
-<p>
-  Let's build a chat system where users can send messages. In TypeScript, this would involve managing state, handling async operations, and dealing with potential race conditions.
-</p>
+  <p>
+    A chat room tracks users and messages and broadcasts new messages to
+    everyone. In TypeScript that means a mutable collection plus care around
+    concurrent updates and broadcast failures:
+  </p>
 
-<h3>TypeScript Approach</h3>
-
-<pre><code>// TypeScript: Managing state and async operations
+  <pre><code>// TypeScript: managing state and async operations
 class ChatRoom {
   private messages: Message[] = [];
   private users: Set<string> = new Set();
-  
+
   async addMessage(userId: string, content: string): Promise<void> {
     // What if another message is being added at the same time?
     // What if the user gets disconnected while we're processing?
@@ -610,27 +148,28 @@ class ChatRoom {
       content,
       timestamp: Date.now()
     };
-    
+
     this.messages.push(message);
     await this.broadcastToUsers(message);
   }
-  
+
   private async broadcastToUsers(message: Message): Promise<void> {
     // Async broadcasting - what if this fails?
-    const promises = Array.from(this.users).map(userId => 
+    const promises = Array.from(this.users).map(userId =>
       this.sendToUser(userId, message)
     );
     await Promise.all(promises);
   }
 }</code></pre>
 
-<p>
-  See all those potential issues? Race conditions, error handling, state management... it's a lot to think about! 😅
-</p>
+  <p>
+    Every method that touches the room has to handle the same questions:
+    ordering of concurrent updates, failures mid-broadcast, who owns the state.
+  </p>
 
-<h3>Gleam Approach</h3>
+  <h3>Gleam approach</h3>
 
-<pre><code>// Gleam: Actor-based chat system
+  <pre><code>// Gleam: actor-based chat system
 import gleam/io
 import gleam/result
 
@@ -652,7 +191,7 @@ pub fn chat_room_loop(state: ChatRoom) -> Nil {
       let message = "User " <> user_id <> ": " <> content
       let new_messages = [message, ..state.messages]
       let new_state = ChatRoom(new_messages, state.users)
-      
+
       // Broadcast to all users
       broadcast_message(message, state.users)
       chat_room_loop(new_state)
@@ -677,23 +216,23 @@ fn broadcast_message(message: String, users: List(String)) -> Nil {
   })
 }</code></pre>
 
-<p>
-  Look at that! No shared state, no race conditions, just pure message passing. Each actor has its own state, and the only way to communicate is through messages. It's like having a bunch of pen pals who can only communicate by sending letters! 📮
-</p>
+  <p>
+    The room is a loop that owns the state and changes it only through messages.
+    There is nothing to lock, because no other process can see the state at all.
+  </p>
 
-<h2>🎮 Example 2: Building a Game Score System</h2>
+  <h2>Example 2: a game score system</h2>
 
-<p>
-  Let's say we're building a multiplayer game where players can score points. In TypeScript, we'd need to worry about concurrent updates to the score.
-</p>
+  <p>
+    A multiplayer game needs concurrent score updates without losing points. In
+    TypeScript, shared mutable state means a lock around every access:
+  </p>
 
-<h3>TypeScript Approach</h3>
-
-<pre><code>// TypeScript: Managing concurrent score updates
+  <pre><code>// TypeScript: managing concurrent score updates
 class GameScore {
   private scores: Map<string, number> = new Map();
   private lock = new Mutex(); // Need to prevent race conditions!
-  
+
   async addScore(playerId: string, points: number): Promise<void> {
     await this.lock.acquire();
     try {
@@ -703,7 +242,7 @@ class GameScore {
       this.lock.release();
     }
   }
-  
+
   async getTopPlayers(limit: number): Promise<PlayerScore[]> {
     await this.lock.acquire();
     try {
@@ -717,13 +256,14 @@ class GameScore {
   }
 }</code></pre>
 
-<p>
-  Mutexes, locks, try-finally blocks... it's like building a fortress just to update a score! 🏰
-</p>
+  <p>
+    The lock makes the updates safe, but it is bookkeeping you have to get right
+    on every method that touches the scores.
+  </p>
 
-<h3>Gleam Approach</h3>
+  <h3>Gleam approach</h3>
 
-<pre><code>// Gleam: Actor-based score system
+  <pre><code>// Gleam: actor-based score system
 import gleam/list
 import gleam/string
 
@@ -771,51 +311,36 @@ fn update_player_score(scores: List(#(String, Int)), player_id: String, points: 
   }
 }</code></pre>
 
-<p>
-  No locks, no mutexes, no shared state! Each actor manages its own state, and the only way to interact with it is through messages. It's like having a dedicated scorekeeper who only responds to written requests! 📝
-</p>
+  <p>
+    The score state belongs to one actor. Updates arrive as messages and are
+    applied in order, so no lock is needed. Queries are messages too, with a
+    reply address attached.
+  </p>
 
-<h2>🤯 The "Aha!" Moments</h2>
+  <h2>What the actor model changes</h2>
 
-<p>
-  Learning Gleam's concurrency model has been full of "aha!" moments:
-</p>
+  <ul>
+    <li><strong>No shared state</strong>: two actors cannot touch the same data at the same time, because there is no shared data to touch.</li>
+    <li><strong>Fault isolation</strong>: a crashed actor does not bring down the rest of the program; other actors keep running.</li>
+    <li><strong>Testability</strong>: an actor is exercised by sending it messages and checking the replies, no mocking of shared state.</li>
+    <li><strong>No nesting</strong>: no chains of await and Promise.all; interaction is a flat loop of receive and send.</li>
+  </ul>
 
-<ul>
-  <li><strong>No more race conditions!</strong> Since actors can't share state, there's no way for two processes to mess with the same data at the same time.</li>
-  <li><strong>Fault tolerance built-in!</strong> If one actor crashes, it doesn't bring down the whole system. Other actors keep running.</li>
-  <li><strong>Testing is easier!</strong> You can test each actor in isolation by sending it messages and checking the responses.</li>
-  <li><strong>No callback hell!</strong> No more nested async/await chains or Promise.all() madness.</li>
-</ul>
+  <h2>When to use which</h2>
 
-<h2>🎯 When to Use What?</h2>
+  <p>
+    Async/await in TypeScript is the right tool when you are integrating with
+    the JavaScript ecosystem, building a straightforward CRUD application, or
+    working with a team that thinks in imperative code. Gleam actors fit when
+    the system is highly concurrent, needs fault tolerance, or handles real-time
+    data — anywhere shared mutable state is the main source of bugs.
+  </p>
 
-<p>
-  After learning both approaches, here's my take:
-</p>
-
-<ul>
-  <li><strong>Use TypeScript async/await when:</strong> You need to integrate with existing JavaScript libraries, you're building simple CRUD applications, or you're working with a team that's more familiar with imperative programming.</li>
-  <li><strong>Use Gleam actors when:</strong> You're building highly concurrent systems, you need fault tolerance, you're working with real-time data, or you want to avoid the complexity of managing shared state.</li>
-</ul>
-
-<h2>🚀 The Journey Continues</h2>
-
-<p>
-  Learning Gleam's concurrency model has been like discovering a new superpower. It's not that one approach is better than the other - they're just different tools for different jobs. But understanding both has made me a better developer overall.
-</p>
-
-<p>
-  The actor model in Gleam feels more like how I naturally think about problems: "This thing needs to handle this type of message, and when it gets that message, it should do this." It's more declarative, more predictable, and honestly? More fun to work with! 🎉
-</p>
-
-<p>
-  If you're a TypeScript developer curious about functional programming and concurrency, I'd definitely recommend giving Gleam a try. It might just change how you think about building concurrent systems! 
-</p>
-
-<p>
-  <em>P.S. - The Gleam community is super friendly and helpful. Don't be afraid to ask questions! 🚀</em>
-</p>`,
+  <p>
+    Neither model is better in general. But most concurrent systems I have built
+    are naturally described as message flows, which is exactly what actors
+    model. If you come from TypeScript, that is a good reason to try Gleam.
+  </p>`,
     featured: true,
   },
 ];
