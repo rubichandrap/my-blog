@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "touch out/.nojekyll && gh-pages -t -d out",
+    "deploy:pages": "touch out/.nojekyll && gh-pages -t -d out",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "dependencies": {

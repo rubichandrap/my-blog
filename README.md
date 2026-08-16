@@ -31,7 +31,7 @@ Open http://localhost:3000/my-blog.
 
 ```bash
 pnpm build      # static export to out/
-pnpm deploy     # publish out/ to GitHub Pages
+pnpm run deploy:pages   # publish out/ to GitHub Pages
 ```
 
 The site is served under the `/my-blog` base path. The contact form sends
